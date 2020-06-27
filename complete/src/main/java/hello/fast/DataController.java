@@ -302,6 +302,7 @@ public class DataController {
                 long timestamp = record.key();
                 map.put("timestamp", record.key());
                 map.put("time", sdf.format(new Date(timestamp / 1000000)) + "." + String.format("%09d", timestamp % 1000000000L));
+//              kafka多列查询问题
                 map.put(columns.toLowerCase(), record.value());
                 res.add(map);
             }
