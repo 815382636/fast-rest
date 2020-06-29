@@ -350,7 +350,7 @@ public class DataController {
     ) throws SQLException {
 
         Long res = 0L;
-        System.out.println(dbtype);
+//        System.out.println(dbtype);
 
         if(dbtype.toLowerCase().equals("iotdb") || dbtype.toLowerCase().equals("session")){
             if(ip != null && port != null) url = String.format("jdbc:iotdb://%s:%s/", ip, port);
@@ -367,13 +367,14 @@ public class DataController {
                     (starttime == null ? "" : " WHERE time >= " + starttime) +
                     (endtime   == null ? "" : " AND time < " + endtime) +
                     (conditions == null ? "" : conditions);
-            System.out.println(sql);
+//            System.out.println(sql);
             ResultSet resultSet = statement.executeQuery(sql);
 
             if (resultSet != null) {
                 while (resultSet.next()) {
                     res = Long.valueOf(resultSet.getString(2));
-                    System.out.println(res);
+//                    System.out.println(res);
+//                    System.out.println("------------------");
                 }
             }
             statement.close();
@@ -394,7 +395,7 @@ public class DataController {
                     (starttime == null ? "" : " WHERE time >= '" + starttime + "'") +
                     (endtime   == null ? "" : " AND time < '" + endtime + "'") +
                     (conditions == null ? "" : " " + conditions);
-            System.out.println(sql);
+//            System.out.println(sql);
             sql = sql.replace("time", timecolumn);
             ResultSet resultSet = pgtool.query(connection, sql);
 
@@ -415,7 +416,7 @@ public class DataController {
                     (starttime == null ? "" : " WHERE time >= '" + starttime) +
                     (endtime   == null ? "" : "' AND time < '" + endtime) + "' " +
                     (conditions == null ? "" : conditions) + ";";
-            System.out.println(sql);
+//            System.out.println(sql);
             QueryResult queryResult = influxDBConnection.query(sql);
 
             for(QueryResult.Result result : queryResult.getResults()){

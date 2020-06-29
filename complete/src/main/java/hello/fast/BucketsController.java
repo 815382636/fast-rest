@@ -79,13 +79,48 @@ public class BucketsController {
             Double timeLimit,
             Double valueLimit
     ) throws SQLException, TException, IoTDBRPCException, IoTDBSessionException {
+//    	拿到所有数据
         List<Map<String, Object>> dataPoints = DataController._dataPoints(
                 url, username, password, database, timeseries, columns, timecolumn, starttime, endtime, conditions, query, "map", ip, port, dbtype);
 
         if(dataPoints.size() < 2) return null;
-
+        
         String iotdbLabel = database + "." + timeseries + "." +columns;
         String label = dbtype.equals("iotdb") ? iotdbLabel : columns;
+        String timelabel = "time";
+
+        return _buckets(dataPoints, timelabel, label, amount, timeLimit, valueLimit);
+    }
+    
+    static List<Bucket> new_buckets(
+    		String column,
+            String url,
+            String username,
+            String password,
+            String database,
+            String timeseries,
+            String columns,
+            String timecolumn,
+            String starttime,
+            String endtime,
+            String conditions,
+            String query,
+            String format,
+            String ip,
+            String port,
+            Integer amount,
+            String dbtype,
+            Double timeLimit,
+            Double valueLimit
+    ) throws SQLException, TException, IoTDBRPCException, IoTDBSessionException {
+//    	拿到所有数据
+        List<Map<String, Object>> dataPoints = DataController._dataPoints(
+                url, username, password, database, timeseries, columns, timecolumn, starttime, endtime, conditions, query, "map", ip, port, dbtype);
+
+        if(dataPoints.size() < 2) return null;
+        
+        String iotdbLabel = database + "." + timeseries + "." +column;
+        String label = dbtype.equals("iotdb") ? iotdbLabel : column;
         String timelabel = "time";
 
         return _buckets(dataPoints, timelabel, label, amount, timeLimit, valueLimit);
@@ -121,6 +156,60 @@ public class BucketsController {
 
         String iotdbLabel = database + "." + timeseries + "." +columns;
         String label = dbtype.equals("iotdb") ? iotdbLabel : columns;
+        String timelabel = "time";
+
+        for(Map<String, Object> dataPoint : dataPoints) dataPoint.put(timelabel, dataPoint.get(timelabel).toString().replace("T", " "));
+        List<Bucket> buckets = new ArrayList<>();
+
+        int p = 0, q = 0;
+        int n = dataPoints.size();
+        lastTimestamp = firstTimestamp + timeinteval;
+        while (p < n){
+            Long dataTimestamp = (long)dataPoints.get(p).get("timestamp");
+            if(dataTimestamp > lastTimestamp){
+                buckets.add(new Bucket(dataPoints.subList(q, p)));
+                q = p;
+                lastTimestamp += timeinteval;
+            }
+            p++;
+        }
+        buckets.add(new Bucket(dataPoints.subList(q, p)));
+
+        return buckets;
+    }
+    
+    
+    static List<Bucket> new_intervals(
+    		String column,
+            String url,
+            String username,
+            String password,
+            String database,
+            String timeseries,
+            String columns,
+            String timecolumn,
+            String starttime,
+            String endtime,
+            String conditions,
+            String query,
+            String format,
+            String ip,
+            String port,
+            Integer amount,
+            String dbtype) throws SQLException, TException, IoTDBRPCException, IoTDBSessionException {
+        List<Map<String, Object>> linkedDataPoints = DataController._dataPoints(
+                url, username, password, database, timeseries, timecolumn, columns, starttime, endtime, conditions, query, "map", ip, port, dbtype);
+        if(linkedDataPoints.size() < 2) return null;
+
+        List<Map<String, Object>> dataPoints = new ArrayList<>(linkedDataPoints);
+
+        Long firstTimestamp = (long)dataPoints.get(0).get("timestamp");
+        Long lastTimestamp = (long)dataPoints.get(dataPoints.size()-1).get("timestamp");
+        Long timestampRange = lastTimestamp - firstTimestamp;
+        Long timeinteval = timestampRange / amount * 4;
+
+        String iotdbLabel = database + "." + timeseries + "." +column;
+        String label = dbtype.equals("iotdb") ? iotdbLabel : column;
         String timelabel = "time";
 
         for(Map<String, Object> dataPoint : dataPoints) dataPoint.put(timelabel, dataPoint.get(timelabel).toString().replace("T", " "));

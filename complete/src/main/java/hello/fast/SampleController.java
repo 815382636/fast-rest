@@ -83,50 +83,61 @@ public class SampleController {
 
         List<Map<String, Object>> res = new ArrayList<>();
 
-        String iotdbLabel = database + "." + timeseries + "." +columns;
-        String label = dbtype.equals("iotdb") ? iotdbLabel : columns;
-        String timelabel = "time";
-
         SamplingOperator samplingOperator;
+//桶内算子
         if(sample.contains("aggregation")) samplingOperator = new Aggregation();
         else if(sample.contains("random")) samplingOperator = new Sample();
         else if(sample.contains("outlier")) samplingOperator = new Outlier();
         else samplingOperator = new M4();
 
-        long dataPointCount = DataController._dataPointsCount(url, username, password, database, timeseries, columns, timecolumn, starttime, endtime, conditions, query, format, ip, port, dbtype);
 
-        long freememery = Runtime.getRuntime().freeMemory();
-        long batchLimit = freememery / 10000L;
-        if(!conditions.contains("limit")) conditions = conditions + " limit " + batchLimit;
-        if(dbtype.equals("postgresql") || dbtype.equals("timescaledb")) conditions = " order by time " + conditions;
-        amount = (int)(amount * batchLimit / dataPointCount);
+        String typeTime =starttime;
+        
+//      对多个column进行处理
+        String[] co =columns.split(",");
+        
+        for (int i = 0; i < co.length; i++) {
+            long dataPointCount = DataController._dataPointsCount(url, username, password, database, timeseries, co[i], timecolumn, starttime, endtime, conditions, query, format, ip, port, dbtype);
+            long freememery = Runtime.getRuntime().freeMemory();
+            long batchLimit = freememery / 10000L;
+            if(!conditions.contains("limit")) conditions = conditions + " limit " + batchLimit;
+            if(dbtype.equals("postgresql") || dbtype.equals("timescaledb")) conditions = " order by time " + conditions;
+            amount = (int)(amount * batchLimit / dataPointCount);
+        	
+        	
+	        String iotdbLabel = database + "." + timeseries + "." +co[i];
+	        String label = dbtype.equals("iotdb") ? iotdbLabel : co[i];
+	        String timelabel = "time";
+	        String latestTime =typeTime;
+	        while (true){
+	            // 先根据采样算子分桶，"simpleXXX"为等间隔分桶，否则为自适应分桶
+	            List<Bucket> buckets =
+	                sample.contains("simple") ?
+	                BucketsController.new_intervals(co[i],url, username, password, database, timeseries, columns, timecolumn, latestTime, endtime, conditions, query, format, ip, port, amount, dbtype) :
+	                BucketsController.new_buckets(co[i],url, username, password, database, timeseries, columns, timecolumn, latestTime, endtime, conditions, query, format, ip, port, amount, dbtype, timeLimit, valueLimit);
+	                
+	            // 无新数据，数据已经消费完成
+	            if(buckets == null) break;
+	            // 最新数据点时间没有改变，数据已经消费完成
+	            List<Map<String, Object>> lastBucket = buckets.get(buckets.size()-1).getDataPoints();
+	            String newestTime = lastBucket.get(lastBucket.size()-1).get("time").toString().substring(0, 23);
+	            if(latestTime.equals(newestTime)) break;
+	            else latestTime = newestTime;
 
-        String latestTime = starttime;
+	            long t1 = System.currentTimeMillis();
 
-        while (true){
-            // 先根据采样算子分桶，"simpleXXX"为等间隔分桶，否则为自适应分桶
-            List<Bucket> buckets =
-                sample.contains("simple") ?
-                BucketsController._intervals(url, username, password, database, timeseries, columns, timecolumn, latestTime, endtime, conditions, query, format, ip, port, amount, dbtype) :
-                BucketsController._buckets(url, username, password, database, timeseries, columns, timecolumn, latestTime, endtime, conditions, query, format, ip, port, amount, dbtype, timeLimit, valueLimit);
+	            res.addAll(samplingOperator.sample(buckets, timelabel, label));
 
-            // 无新数据，数据已经消费完成
-            if(buckets == null) break;
-            // 最新数据点时间没有改变，数据已经消费完成
-            List<Map<String, Object>> lastBucket = buckets.get(buckets.size()-1).getDataPoints();
-            String newestTime = lastBucket.get(lastBucket.size()-1).get("time").toString().substring(0, 23);
-            if(latestTime.equals(newestTime)) break;
-            else latestTime = newestTime;
+	            System.out.println("SampleController: " + (System.currentTimeMillis() - t1) + "ms");
 
-            long t1 = System.currentTimeMillis();
+	            // 特殊判断：一次就可以获取所有数据
+	            if(dataPointCount < batchLimit) break;
+	        }
+		}
 
-            res.addAll(samplingOperator.sample(buckets, timelabel, label));
-
-            System.out.println("SampleController: " + (System.currentTimeMillis() - t1) + "ms");
-
-            // 特殊判断：一次就可以获取所有数据
-            if(dataPointCount < batchLimit) break;
-        }
+        System.out.println("----------------");
+        System.out.println(res.size());
+        System.out.println("---------------------");
 
         if(format.equals("map")) return res;
         List<Map<String, Object>> result = new ArrayList<>();
