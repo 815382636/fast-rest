@@ -117,7 +117,10 @@ public class QueryController {
         }
 
         if(!hit) res = DataController._dataPoints(url, username, password, database, timeseries, columns, timecolumn, starttime, endtime, " limit 10000", null, format, ip, port, dbtype);
-
+        
+        System.out.println("-------------");
+        System.out.println(res.size());
+        System.out.println("-------------");
         if(format.equals("map")) return res;
         List<Map<String, Object>> result = new ArrayList<>();
         for(Map<String, Object> map : res){

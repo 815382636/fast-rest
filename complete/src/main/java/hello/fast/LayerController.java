@@ -68,11 +68,11 @@ public class LayerController {
             if (ip != null && port != null) url = String.format("jdbc:iotdb://%s:%s/", ip, port);
         }
 
-        System.out.println(url);
-        System.out.println(database);
-        System.out.println(timeseries);
-        System.out.println(columns);
-        System.out.println(dbtype);
+//        System.out.println(url);
+//        System.out.println(database);
+//        System.out.println(timeseries);
+//        System.out.println(columns);
+//        System.out.println(dbtype);
 
         String subId = DigestUtils.md5DigestAsHex(String.format("%s,%s,%s,%s,%s", url, database, timeseries, columns, salt).getBytes()).substring(0,8);
         System.out.println(subId);
@@ -125,8 +125,8 @@ public class LayerController {
             default:
                 TYPE = "text";
         }
-
-        System.out.println(TYPE);
+       
+//        System.out.println(TYPE);
 
         LayerThread subscribeThread = new LayerThread(url, username, password, database, timeseries, columns, timecolumn, starttime, endtime, TYPE, ratio, subId, 0, sample, dbtype, timeLimit, valueLimit, batchlimit,null, null);
         subscribeThread.start();
