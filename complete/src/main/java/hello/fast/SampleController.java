@@ -99,11 +99,13 @@ public class SampleController {
         for (int i = 0; i < co.length; i++) {
             long dataPointCount = DataController._dataPointsCount(url, username, password, database, timeseries, co[i], timecolumn, starttime, endtime, conditions, query, format, ip, port, dbtype);
             long freememery = Runtime.getRuntime().freeMemory();
+//            每一批次最多查询的数据    batchlimit:21088
             long batchLimit = freememery / 10000L;
             if(!conditions.contains("limit")) conditions = conditions + " limit " + batchLimit;
             if(dbtype.equals("postgresql") || dbtype.equals("timescaledb")) conditions = " order by time " + conditions;
+//            每一批次所要拿到的采样的数目
             amount = (int)(amount * batchLimit / dataPointCount);
-        	
+//        	System.out.println("batchlimit:"+batchLimit);
         	
 	        String iotdbLabel = database + "." + timeseries + "." +co[i];
 	        String label = dbtype.equals("iotdb") ? iotdbLabel : co[i];

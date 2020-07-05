@@ -1,0 +1,30 @@
+2019-08-15 00:00:00
+2019-08-20 00:00:00
+1900
+3000
+1000
+200
+sf-data
+http://192.168.10.172:8080/data
+{"columns":"ZT31","database":"root.group_9","dbtype":"iotdb","endtime":"2019-08-20 00:00:00","password":"root","starttime":"2019-08-15 00:00:00","timeseries":"1701","url":"jdbc:iotdb://101.6.15.201:6667/","username":"root","conditions":" and ZT31 > 0 "}
+sf-bm4-50000
+http://192.168.10.172:8080/m4sample
+{"amount":20000,"columns":"ZT31","database":"root.group_9","dbtype":"iotdb","endtime":"2019-08-20 00:00:00","password":"root","starttime":"2019-08-15 00:00:00","timeseries":"1701","url":"jdbc:iotdb://101.6.15.201:6667/","username":"root","conditions":" and ZT31 > 0 "}
+sf-bm4-20000
+http://192.168.10.172:8080/m4sample
+{"amount":20000,"columns":"ZT31","database":"root.group_9","dbtype":"iotdb","endtime":"2019-08-20 00:00:00","password":"root","starttime":"2019-08-15 00:00:00","timeseries":"1701","url":"jdbc:iotdb://101.6.15.201:6667/","username":"root","conditions":" and ZT31 > 0 "}
+sf-bm4-10000
+http://192.168.10.172:8080/m4sample
+{"amount":10000,"columns":"ZT31","database":"root.group_9","dbtype":"iotdb","endtime":"2019-08-20 00:00:00","password":"root","starttime":"2019-08-15 00:00:00","timeseries":"1701","url":"jdbc:iotdb://101.6.15.201:6667/","username":"root","conditions":" and ZT31 > 0 "}
+sf-bm4-5000
+http://192.168.10.172:8080/m4sample
+{"amount":5000,"columns":"ZT31","database":"root.group_9","dbtype":"iotdb","endtime":"2019-08-20 00:00:00","password":"root","starttime":"2019-08-15 00:00:00","timeseries":"1701","url":"jdbc:iotdb://101.6.15.201:6667/","username":"root","conditions":" and ZT31 > 0 "}
+sf-bm4-2000
+http://192.168.10.172:8080/m4sample
+{"amount":2000,"columns":"ZT31","database":"root.group_9","dbtype":"iotdb","endtime":"2019-08-20 00:00:00","password":"root","starttime":"2019-08-15 00:00:00","timeseries":"1701","url":"jdbc:iotdb://101.6.15.201:6667/","username":"root","conditions":" and ZT31 > 0 "}
+sf-bm4-1000
+http://192.168.10.172:8080/m4sample
+{"amount":1000,"columns":"ZT31","database":"root.group_9","dbtype":"iotdb","endtime":"2019-08-20 00:00:00","password":"root","starttime":"2019-08-15 00:00:00","timeseries":"1701","url":"jdbc:iotdb://101.6.15.201:6667/","username":"root","conditions":" and ZT31 > 0 "}
+sf-bm4-0500
+http://192.168.10.172:8080/m4sample
+{"amount":500,"columns":"ZT31","database":"root.group_9","dbtype":"iotdb","endtime":"2019-08-20 00:00:00","password":"root","starttime":"2019-08-15 00:00:00","timeseries":"1701","url":"jdbc:iotdb://101.6.15.201:6667/","username":"root","conditions":" and ZT31 > 0 "}
