@@ -127,9 +127,11 @@ if start_step <= 2:
 
         if response.status_code == 200:
             json_data = pd.read_json(response.text)
+            print(json_data.columns)
             if dbtype == "iotdb":
                 json_data.columns = list(map(lambda x: x.split(".")[-1].lower(), list(json_data.columns)))
             json_data = json_data.loc[json_data[value_label] > 0]
+            print(json_data.columns)
         else:
             print("请求数据失败!")
             exit(0)
@@ -164,7 +166,7 @@ if start_step <= 2:
         area_chart = name + area_postfix
 
         color = "#4FC1E8"
-
+        # print(json_data)
         alt.Chart(json_data).mark_line().encode(
             alt.X(scale=alt.Scale(domain=[start_time, end_time]), field=time_label, type="temporal",
                   axis=alt.Axis(title="", labelFontSize=20)),

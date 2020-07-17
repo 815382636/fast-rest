@@ -11,6 +11,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 
 /**
 * 层级控制器，实现数据采样订阅的层级采样
@@ -27,13 +29,13 @@ public class LayerController {
             @RequestParam(value="password", defaultValue = "root") String password,
             @RequestParam(value="database") String database,
             @RequestParam(value="timeseries") String timeseries,
-            @RequestParam(value="columns") String columns,
+			@RequestParam(value = "columns") List<String> columns,
             @RequestParam(value="timeColumn", defaultValue = "time") String timecolumn,
             @RequestParam(value="startTime", defaultValue = "1971-01-01 00:00:00") String starttime,
             @RequestParam(value="endTime", required = false) String endtime,
             @RequestParam(value="sample") String sample,
-            @RequestParam(value="timeLimit", required = false) Double timeLimit,
-            @RequestParam(value="valueLimit", required = false) Double valueLimit,
+			@RequestParam(value = "correlation", defaultValue = "True") Boolean correlation,
+			@RequestParam(value = "valueLimit", required = false) Map<String, Double> valueLimit,
             @RequestParam(value="ratio", defaultValue = "10") Integer ratio,
             @RequestParam(value="ip", required = false) String ip,
             @RequestParam(value="port", required = false) String port,
@@ -46,7 +48,6 @@ public class LayerController {
         password = password.replace("\"", "");
         database = database.replace("\"", "");
         timeseries = timeseries.replace("\"", "");
-        columns = columns.replace("\"", "");
         timecolumn = timecolumn.replace("\"", "");
         starttime = starttime.replace("\"", "");
         endtime = endtime == null ? null : endtime.replace("\"", "");
@@ -68,13 +69,15 @@ public class LayerController {
             if (ip != null && port != null) url = String.format("jdbc:iotdb://%s:%s/", ip, port);
         }
 
-//        System.out.println(url);
-//        System.out.println(database);
-//        System.out.println(timeseries);
-//        System.out.println(columns);
-//        System.out.println(dbtype);
+        String columnsStr ="";
+        for (int k = 0; k < columns.size(); k++) {
+        	columnsStr +=columns.get(k);
+			if(k !=columns.size()-1) {
+				columnsStr +=",";
+			}
+		}
 
-        String subId = DigestUtils.md5DigestAsHex(String.format("%s,%s,%s,%s,%s", url, database, timeseries, columns, salt).getBytes()).substring(0,8);
+        String subId = DigestUtils.md5DigestAsHex(String.format("%s,%s,%s,%s,%s", url, database, timeseries, columnsStr, salt).getBytes()).substring(0,8);
         System.out.println(subId);
 
         String config = "";
@@ -101,7 +104,7 @@ public class LayerController {
         String L0table = "l0_m" + subId;
         System.out.println(L0table);
 
-        String[] tables = QueryController.subTables(url, innerUrl, innerUserName, innerPassword, database, timeseries, columns);
+        String[] tables = QueryController.subTables(url, innerUrl, innerUserName, innerPassword, database, timeseries, columnsStr);
 
         for(String table : tables){
             if(L0table.equals(table)) {
@@ -128,7 +131,7 @@ public class LayerController {
        
 //        System.out.println(TYPE);
 
-        LayerThread subscribeThread = new LayerThread(url, username, password, database, timeseries, columns, timecolumn, starttime, endtime, TYPE, ratio, subId, 0, sample, dbtype, timeLimit, valueLimit, batchlimit,null, null);
+        LayerThread subscribeThread = new LayerThread(url, username, password, database, timeseries, columns, timecolumn, starttime, endtime, TYPE, ratio, subId, 0, sample, dbtype, valueLimit, batchlimit,null, null,correlation);
         subscribeThread.start();
 
         return subId;

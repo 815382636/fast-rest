@@ -1,0 +1,10 @@
+.Python
+area_png/
+line_png/
+pixel_png/
+l_msssim_result.txt
+mse_result.txt
+msssim_result.txt
+pae_result.txt
+pmse_result.txt
+stat_result.txt

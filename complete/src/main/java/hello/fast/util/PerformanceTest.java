@@ -13,6 +13,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -107,6 +108,8 @@ public class PerformanceTest {
         long subLatency = 0L;
 
 
+        String[] co =columns.split(",");
+        List<String> coList =Arrays.asList(co);
         for(int i = 0; i < 10; i++){
 
             SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS"); //设置格式
@@ -119,7 +122,7 @@ public class PerformanceTest {
             subLatency += rawDataTime - subSampleTime;
 
             if(!dbtype.equals("kafka")){
-                List<Map<String, Object>> samplePoints = new SampleController().dataPoints(url, username, password, database, timeseries, columns, "time", starttime, endtime, null, null, "map", null, null, 500, dbtype, "m4", null, null);
+                List<Map<String, Object>> samplePoints = new SampleController().dataPoints(url, username, password, database, timeseries, coList, "time", starttime, endtime, null, null, "map", null, null, 500, dbtype, "m4", null, null,null);
                 rawDataTime = (System.currentTimeMillis()+(1000/batch)) * 1000000;
                 long sampleTime = (long)samplePoints.get(samplePoints.size()-1).get("timestamp");
                 sampleLatency += rawDataTime - sampleTime;

@@ -54,7 +54,7 @@ public class DataController {
             @RequestParam(value="password", defaultValue = "root") String password,
             @RequestParam(value="database") String database,
             @RequestParam(value="timeseries", required = false) String timeseries,
-            @RequestParam(value="columns", required = false) String columns,
+            @RequestParam(value="columns", required = false) List<String> columns,
             @RequestParam(value="timeColumn", defaultValue = "time") String timecolumn,
             @RequestParam(value="startTime", required = false) String starttime,
             @RequestParam(value="endTime", required = false) String endtime,
@@ -71,7 +71,6 @@ public class DataController {
         password = password.replace("\"", "");
         database = database.replace("\"", "");
         timeseries = timeseries.replace("\"", "");
-        columns = columns.replace("\"", "");
         timecolumn = timecolumn.replace("\"", "");
         starttime = starttime == null ? null : starttime.replace("\"", "");
         endtime = endtime == null ? null :endtime.replace("\"", "");
@@ -81,8 +80,14 @@ public class DataController {
         ip = ip == null ? null : ip.replace("\"", "");
         port = port == null ? null : port.replace("\"", "");
         query = query == null ? null : query.replace("\"", "");
-
-        return _dataPoints(url, username, password, database, timeseries, columns, timecolumn, starttime, endtime, conditions, query, format, ip, port, dbtype);
+        String co ="";
+        for (int i = 0; i < columns.size(); i++) {
+			co +=columns.get(i);
+			if(i !=columns.size()-1) {
+				co +=",";
+			}
+		}
+        return _dataPoints(url, username, password, database, timeseries, co, timecolumn, starttime, endtime, conditions, query, format, ip, port, dbtype);
     }
 
     public static List<Map<String, Object>> _dataPoints(
@@ -395,7 +400,7 @@ public class DataController {
                     (starttime == null ? "" : " WHERE time >= '" + starttime + "'") +
                     (endtime   == null ? "" : " AND time < '" + endtime + "'") +
                     (conditions == null ? "" : " " + conditions);
-//            System.out.println(sql);
+            System.out.println(sql);
             sql = sql.replace("time", timecolumn);
             ResultSet resultSet = pgtool.query(connection, sql);
 
@@ -416,7 +421,6 @@ public class DataController {
                     (starttime == null ? "" : " WHERE time >= '" + starttime) +
                     (endtime   == null ? "" : "' AND time < '" + endtime) + "' " +
                     (conditions == null ? "" : conditions) + ";";
-//            System.out.println(sql);
             QueryResult queryResult = influxDBConnection.query(sql);
 
             for(QueryResult.Result result : queryResult.getResults()){
