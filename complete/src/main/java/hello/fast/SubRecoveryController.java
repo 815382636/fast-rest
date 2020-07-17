@@ -14,6 +14,9 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.net.ConnectException;
 
 import hello.fast.source.PGConnection;
@@ -111,21 +114,28 @@ public class SubRecoveryController implements ApplicationRunner {
             String path = param.get("url").toString();
             String database = param.get("database").toString();
             String timeseries = param.get("timeseries").toString();
-            String columns = param.get("columns").toString();
+            List<String> columns = (List)param.get("columns");
             String timecolumn = param.containsKey("timeColumn") ? param.get("timeColumn").toString() : "time";
             String username = param.get("username").toString();
             String password = param.get("password").toString();
             String starttime = param.get("startTime").toString();
             String endtime = param.containsKey("endTime") ? param.get("endTime").toString() : null;
             String sample = param.get("sample").toString();
-            Double percent = param.containsKey("timeLimit") ? param.getDouble("timeLimit") : null;
-            Double alpha = param.containsKey("valueLimit") ? param.getDouble("valueLimit") : null;
+            Boolean correlation =param.containsKey("correlation") ? param.getBoolean("timeLimit") : true;
+            Map<String, Double> alpha = param.containsKey("valueLimit") ? (Map)param.get("valueLimit") : null;
             String dbtype = param.get("dbtype").toString();
             Integer ratio = param.containsKey("ratio") ? param.getInteger("ratio") : 20;
             String query = param.containsKey("query") ? param.get("query").toString() : null;
             String ip = param.containsKey("ip") ? param.get("ip").toString() : null;
             String port = param.containsKey("port") ? param.get("port").toString() : null;
 
+            String columnsStr ="";
+	        for (int k = 0; k < columns.size(); k++) {
+	        	columnsStr +=columns.get(k);
+				if(k !=columns.size()-1) {
+					columnsStr +=",";
+				}
+			}
 
             System.out.println(path);
             System.out.println(database);
@@ -134,10 +144,10 @@ public class SubRecoveryController implements ApplicationRunner {
             System.out.println(dbtype);
 
             // iotdb is . tsdb is _
-            String L0tableName = "L0" + "_M" + DigestUtils.md5DigestAsHex(String.format("%s,%s,%s,%s,%s", path, database, timeseries, columns, salt).getBytes()).substring(0, 8);
+            String L0tableName = "L0" + "_M" + DigestUtils.md5DigestAsHex(String.format("%s,%s,%s,%s,%s", path, database, timeseries, columnsStr, salt).getBytes()).substring(0, 8);
             ;
-            String L1tableName = "L1" + "_M" + DigestUtils.md5DigestAsHex(String.format("%s,%s,%s,%s,%s", path, database, L0tableName, columns, salt).getBytes()).substring(0, 8);
-            String L2tableName = "L2" + "_M" + DigestUtils.md5DigestAsHex(String.format("%s,%s,%s,%s,%s", path, database, L1tableName, columns, salt).getBytes()).substring(0, 8);
+            String L1tableName = "L1" + "_M" + DigestUtils.md5DigestAsHex(String.format("%s,%s,%s,%s,%s", path, database, L0tableName, columnsStr, salt).getBytes()).substring(0, 8);
+            String L2tableName = "L2" + "_M" + DigestUtils.md5DigestAsHex(String.format("%s,%s,%s,%s,%s", path, database, L1tableName, columnsStr, salt).getBytes()).substring(0, 8);
 
             String[] tables = new String[3];
             tables[0] = L2tableName;
@@ -180,7 +190,7 @@ public class SubRecoveryController implements ApplicationRunner {
 
             connection.close();
 
-            new LayerController().subscribe(path, username, password, database, timeseries, columns, timecolumn, newStartTime, endtime, sample, percent, alpha, ratio, ip, port, dbtype, 100000L);
+            new LayerController().subscribe(path, username, password, database, timeseries, columns, timecolumn, newStartTime, endtime, sample,correlation, alpha, ratio, ip, port, dbtype, 100000L);
 
         }
     }

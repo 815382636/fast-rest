@@ -261,4 +261,20 @@ public class SampleController {
 
 		return samplingOperator.sample(buckets, timelabel, label);
 	}
+	
+	static List<Map<String, Object>> correlation_samplePoints(List<Bucket> buckets, String timelabel, String[] labels,
+			String sample) {
+		SamplingSynthesize samplingSynthesize;
+
+		if (sample.contains("aggregation"))
+			samplingSynthesize = new AggregationSynthesize();
+		else if (sample.contains("random"))
+			samplingSynthesize = new SampleSynthesize();
+		else if (sample.contains("outlier"))
+			samplingSynthesize = new OutlierSynthesize();
+		else
+			samplingSynthesize = new M4Synthesize();
+
+		return samplingSynthesize.sample(buckets, timelabel, labels);
+	}
 }

@@ -33,7 +33,7 @@ public class QueryController {
             @RequestParam(value="password", defaultValue = "root") String password,
             @RequestParam(value="database") String database,
             @RequestParam(value="timeseries") String timeseries,
-            @RequestParam(value="columns") String columns,
+            @RequestParam(value="columns") List<String> columns,
             @RequestParam(value="timecolumn", defaultValue = "time") String timecolumn,
             @RequestParam(value="starttime", required = false) String starttime,
             @RequestParam(value="endtime", required = false) String endtime,
@@ -48,7 +48,6 @@ public class QueryController {
         password = password.replace("\"", "");
         database = database.replace("\"", "");
         timeseries = timeseries.replace("\"", "");
-        columns = columns.replace("\"", "");
         timecolumn = timecolumn.replace("\"", "");
         starttime = starttime == null ? null : starttime.replace("\"", "");
         endtime = endtime == null ? null : endtime.replace("\"", "");
@@ -92,8 +91,16 @@ public class QueryController {
         String innerUserName = jsonObject.getString("innerusername");
         String innerPassword = jsonObject.getString("innerpassword");
 
+        String columnsStr ="";
+        for (int k = 0; k < columns.size(); k++) {
+        	columnsStr +=columns.get(k);
+			if(k !=columns.size()-1) {
+				columnsStr +=",";
+			}
+		}
+        
         // iotdb is . tsdb is _
-        String[] tables = subTables(url, innerUrl, innerUserName, innerPassword, database, timeseries, columns);
+        String[] tables = subTables(url, innerUrl, innerUserName, innerPassword, database, timeseries, columnsStr);
         // 是否已经找到对应层级
         boolean hit = false;
 
@@ -102,11 +109,11 @@ public class QueryController {
             System.out.println(tableName);
             if(!hit){
                 res = new ArrayList<>(DataController._dataPoints(
-                    innerUrl, innerUserName, innerPassword, database.replace(".", "_"), tableName, columns + ", weight, error, area", "time", starttime, endtime, null, null, "map", null, null, "postgresql"));
+                    innerUrl, innerUserName, innerPassword, database.replace(".", "_"), tableName, columnsStr + ", weight, error, area", "time", starttime, endtime, null, null, "map", null, null, "postgresql"));
             }
             else{
                 res.addAll(DataController._dataPoints(
-                    innerUrl, innerUserName, innerPassword, database.replace(".", "_"), tableName, columns, "time", starttime, endtime, null, null, "map", null, null, "postgresql"));
+                    innerUrl, innerUserName, innerPassword, database.replace(".", "_"), tableName, columnsStr, "time", starttime, endtime, null, null, "map", null, null, "postgresql"));
             }
             System.out.println("res.size()" + res.size());
             if (res.size() >= amount) {
@@ -116,7 +123,7 @@ public class QueryController {
             }
         }
 
-        if(!hit) res = DataController._dataPoints(url, username, password, database, timeseries, columns, timecolumn, starttime, endtime, " limit 10000", null, format, ip, port, dbtype);
+        if(!hit) res = DataController._dataPoints(url, username, password, database, timeseries, columnsStr, timecolumn, starttime, endtime, " limit 10000", null, format, ip, port, dbtype);
         
         System.out.println("-------------");
         System.out.println(res.size());
@@ -147,7 +154,7 @@ public class QueryController {
             @RequestParam(value="password", defaultValue = "root") String password,
             @RequestParam(value="database") String database,
             @RequestParam(value="timeseries") String timeseries,
-            @RequestParam(value="columns") String columns,
+            @RequestParam(value="columns") List<String> columns,
             @RequestParam(value="timeColumn", defaultValue = "time") String timecolumn,
             @RequestParam(value="startTime", required = false) String starttime,
             @RequestParam(value="endTime", required = false) String endtime,
@@ -162,7 +169,6 @@ public class QueryController {
         password = password.replace("\"", "");
         database = database.replace("\"", "");
         timeseries = timeseries.replace("\"", "");
-        columns = columns.replace("\"", "");
         timecolumn = timecolumn.replace("\"", "");
         starttime = starttime == null ? null : starttime.replace("\"", "");
         endtime = endtime == null ? null : endtime.replace("\"", "");
@@ -206,8 +212,16 @@ public class QueryController {
         String innerUserName = jsonObject.getString("innerusername");
         String innerPassword = jsonObject.getString("innerpassword");
 
+        String columnsStr ="";
+        for (int k = 0; k < columns.size(); k++) {
+        	columnsStr +=columns.get(k);
+			if(k !=columns.size()-1) {
+				columnsStr +=",";
+			}
+		}
+        
         // iotdb is . tsdb is _
-        String[] tables = subTables(url, innerUrl, innerUserName, innerPassword, database, timeseries, columns);
+        String[] tables = subTables(url, innerUrl, innerUserName, innerPassword, database, timeseries, columnsStr);
         boolean hit = false;
 
         List<Map<String, Object>> res = null;
@@ -215,11 +229,11 @@ public class QueryController {
             System.out.println(tableName);
             if(!hit){
                 res = new ArrayList<>(DataController._dataPoints(
-                    innerUrl, innerUserName, innerPassword, database.replace(".", "_"), tableName, columns + ", weight, error, area", "time", starttime, endtime, null, null, "map", null, null, "postgresql"));
+                    innerUrl, innerUserName, innerPassword, database.replace(".", "_"), tableName, columnsStr + ", weight, error, area", "time", starttime, endtime, null, null, "map", null, null, "postgresql"));
             }
             else {
                 res.addAll(DataController._dataPoints(
-                    innerUrl, innerUserName, innerPassword, database.replace(".", "_"), tableName, columns + ", weight, error, area", "time", starttime, endtime, null, null, "map", null, null, "postgresql"));
+                    innerUrl, innerUserName, innerPassword, database.replace(".", "_"), tableName, columnsStr + ", weight, error, area", "time", starttime, endtime, null, null, "map", null, null, "postgresql"));
             }
             System.out.println("res.size()" + res.size());
 
@@ -240,7 +254,7 @@ public class QueryController {
         }
 
         // 找不到合适的样本，查询原始数据
-        if(!hit) res = DataController._dataPoints(url, username, password, database, timeseries, columns, timecolumn, starttime, endtime, " limit 10000", null, format, ip, port, dbtype);
+        if(!hit) res = DataController._dataPoints(url, username, password, database, timeseries, columnsStr, timecolumn, starttime, endtime, " limit 10000", null, format, ip, port, dbtype);
 
         System.out.println("ErrorQueryController: " + (System.currentTimeMillis() - t1) + "ms");
 
