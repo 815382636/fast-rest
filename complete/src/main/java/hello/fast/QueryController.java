@@ -3,6 +3,8 @@ package hello.fast;
 import com.alibaba.fastjson.JSONObject;
 import hello.fast.meta.TimeSeries;
 import hello.fast.meta.TimeSeriesController;
+import hello.fast.util.UtilMethod;
+
 import org.apache.iotdb.rpc.IoTDBRPCException;
 import org.apache.iotdb.session.IoTDBSessionException;
 import org.apache.thrift.TException;
@@ -40,6 +42,7 @@ public class QueryController {
             @RequestParam(value="amount", defaultValue = "2000") Long amount,
             @RequestParam(value="ip", required = false) String ip,
             @RequestParam(value="port", required = false) String port,
+			@RequestParam(value = "returnType", defaultValue = "division") String returnType,
             @RequestParam(value="dbtype", defaultValue = "iotdb") String dbtype,
             @RequestParam(value="format", defaultValue = "map") String format
     ) throws SQLException, TException, IoTDBRPCException, IoTDBSessionException {
@@ -47,6 +50,7 @@ public class QueryController {
         username = username.replace("\"", "");
         password = password.replace("\"", "");
         database = database.replace("\"", "");
+        returnType =returnType.replace("\"", "");
         timeseries = timeseries.replace("\"", "");
         timecolumn = timecolumn.replace("\"", "");
         starttime = starttime == null ? null : starttime.replace("\"", "");
@@ -128,6 +132,9 @@ public class QueryController {
         System.out.println("-------------");
         System.out.println(res.size());
         System.out.println("-------------");
+        if (returnType.contains("Integration")) 
+        	res =UtilMethod.change_type(res, columns);
+		
         if(format.equals("map")) return res;
         List<Map<String, Object>> result = new ArrayList<>();
         for(Map<String, Object> map : res){
@@ -161,6 +168,7 @@ public class QueryController {
             @RequestParam(value="error", required = false) Double errorPercent,
             @RequestParam(value="ip", required = false) String ip,
             @RequestParam(value="port", required = false) String port,
+			@RequestParam(value = "returnType", defaultValue = "division") String returnType,
             @RequestParam(value="dbtype", defaultValue = "iotdb") String dbtype,
             @RequestParam(value="format", defaultValue = "map") String format
     ) throws SQLException, TException, IoTDBRPCException, IoTDBSessionException {
@@ -170,6 +178,7 @@ public class QueryController {
         database = database.replace("\"", "");
         timeseries = timeseries.replace("\"", "");
         timecolumn = timecolumn.replace("\"", "");
+        returnType =returnType.replace("\"", "");
         starttime = starttime == null ? null : starttime.replace("\"", "");
         endtime = endtime == null ? null : endtime.replace("\"", "");
         format = format.replace("\"", "");
@@ -258,6 +267,8 @@ public class QueryController {
 
         System.out.println("ErrorQueryController: " + (System.currentTimeMillis() - t1) + "ms");
 
+        if (returnType.contains("Integration")) 
+        	res =UtilMethod.change_type(res, columns);
         return res;
     }
 

@@ -3,7 +3,7 @@ package hello.fast;
 import hello.fast.source.InfluxDBConnection;
 import hello.fast.source.IoTDBConnection;
 import hello.fast.source.PGConnection;
-
+import hello.fast.util.UtilMethod;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -63,6 +63,7 @@ public class DataController {
             @RequestParam(value="format", defaultValue = "map") String format,
             @RequestParam(value="ip", required = false) String ip,
             @RequestParam(value="port", required = false) String port,
+			@RequestParam(value = "returnType", defaultValue = "division") String returnType,
             @RequestParam(value="dbtype", defaultValue = "iotdb") String dbtype
     ) throws SQLException, IoTDBSessionException, TException, IoTDBRPCException {
         // trim the '"' of the parameters
@@ -72,6 +73,7 @@ public class DataController {
         database = database.replace("\"", "");
         timeseries = timeseries.replace("\"", "");
         timecolumn = timecolumn.replace("\"", "");
+        returnType =returnType.replace("\"", "");
         starttime = starttime == null ? null : starttime.replace("\"", "");
         endtime = endtime == null ? null :endtime.replace("\"", "");
         conditions = conditions == null ? null : conditions.replace("\"", "");
@@ -87,7 +89,14 @@ public class DataController {
 				co +=",";
 			}
 		}
-        return _dataPoints(url, username, password, database, timeseries, co, timecolumn, starttime, endtime, conditions, query, format, ip, port, dbtype);
+        List<Map<String, Object>> dataPoints =_dataPoints(url, username, password, database, timeseries, co, timecolumn, starttime, endtime, conditions, query, format, ip, port, dbtype);
+        if (returnType.contains("Integration")) {
+        	return UtilMethod.change_type(dataPoints, columns);
+		}else {
+			return dataPoints;
+		}
+        
+        
     }
 
     public static List<Map<String, Object>> _dataPoints(

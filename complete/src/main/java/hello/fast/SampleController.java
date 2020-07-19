@@ -2,6 +2,8 @@ package hello.fast;
 
 import hello.fast.obj.Bucket;
 import hello.fast.sampling.*;
+import hello.fast.util.UtilMethod;
+
 import org.apache.iotdb.rpc.IoTDBRPCException;
 import org.apache.iotdb.session.IoTDBSessionException;
 import org.apache.thrift.TException;
@@ -35,6 +37,7 @@ public class SampleController {
 			@RequestParam(value = "amount", defaultValue = "2000") Integer amount,
 			@RequestParam(value = "dbtype", defaultValue = "iotdb") String dbtype,
 			@RequestParam(value = "sample", defaultValue = "m4") String sample,
+			@RequestParam(value = "returnType", defaultValue = "division") String returnType,
 			@RequestParam(value = "bucketMethod", defaultValue = "adaption") String bucketMethod,
 			@RequestParam(value = "correlation", defaultValue = "True") Boolean correlation,
 			@RequestParam(value = "valueLimit", required = false) Map<String, Double> valueLimit) throws Exception {
@@ -45,6 +48,7 @@ public class SampleController {
 		database = database.replace("\"", "");
 		timeseries = timeseries.replace("\"", "");
 		timecolumn = timecolumn.replace("\"", "");
+        returnType =returnType.replace("\"", "");
 		starttime = starttime == null ? "1971-01-01 00:00:00" : starttime.replace("\"", "");
 		endtime = endtime == null ? "2099-01-01 00:00:00" : endtime.replace("\"", "");
 		conditions = conditions == null ? "" : conditions.replace("\"", "");
@@ -56,8 +60,13 @@ public class SampleController {
 		port = port == null ? null : port.replace("\"", "");
 		query = query == null ? null : query.replace("\"", "");
 
-		return _samplePoints(url, username, password, database, timeseries, columns, timecolumn, starttime, endtime,
+		List<Map<String, Object>> dataPoints =_samplePoints(url, username, password, database, timeseries, columns, timecolumn, starttime, endtime,
 				conditions, query, format, sample, ip, port, amount, dbtype, valueLimit,bucketMethod,correlation);
+		if (returnType.contains("Integration")) {
+        	return UtilMethod.change_type(dataPoints, columns);
+		}else {
+			return dataPoints;
+		}
 	}
 
 	static List<Map<String, Object>> _samplePoints(String url, String username, String password, String database,
@@ -104,6 +113,9 @@ public class SampleController {
 					conditions = " order by time " + conditions;
 //                每一批次所要拿到的采样的数目
 				amount = (int) (amount * batchLimit / dataPointCount);
+				if (amount ==0) {
+					amount =1;
+				}
 //            	System.out.println("batchlimit:"+batchLimit);
 
 				String iotdbLabel = database + "." + timeseries + "." + co[i];
@@ -188,6 +200,9 @@ public class SampleController {
 			if (dbtype.equals("postgresql") || dbtype.equals("timescaledb"))
 				conditions = " order by time " + conditions;
 			amount = (int) (amount * batchLimit / dataPointCount);
+			if (amount ==0) {
+				amount =1;
+			}
 //			System.out.println("总长度："+dataPointCount);
 			String latestTime = starttime;
 //			System.out.println("开始时间"+latestTime);

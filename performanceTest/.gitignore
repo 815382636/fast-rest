@@ -8,3 +8,6 @@ msssim_result.txt
 pae_result.txt
 pmse_result.txt
 stat_result.txt
+interfaceTest/area_png/
+interfaceTest/line_png/
+interfaceTest/pixel_png/
