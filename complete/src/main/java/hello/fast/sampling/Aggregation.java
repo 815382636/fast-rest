@@ -27,8 +27,13 @@ public class Aggregation implements SamplingOperator {
             }
 
             Map<String, Object> obj = new HashMap<>();
-            obj.put(timeLabel, datapoints.get(datapoints.size()-1).get(timeLabel));
-            obj.put(valueLabel, valueSum / datapoints.size());
+            for (String map_key : datapoints.get(datapoints.size()-1).keySet()) {
+				if (map_key.equals(valueLabel)) {
+		            obj.put(valueLabel, valueSum / datapoints.size());
+				}else {
+					obj.put(map_key, datapoints.get(datapoints.size()-1).get(map_key));
+				}
+			}
             res.add(obj);
         }
 

@@ -111,8 +111,12 @@ if start_step <= 2:
             json_data = pd.read_json(response.text)
             if dbtype == "iotdb":
                 json_data.columns = list(map(lambda x: x.split(".")[-1].lower(), list(json_data.columns)))
+            print(json_data.columns)
+            # print(json_data[0])
             json_data = json_data.loc[json_data[value_label] > 0]
             print(json_data.columns)
+            # print(json_data[0])
+
         else:
             print("请求数据失败!")
             exit(0)

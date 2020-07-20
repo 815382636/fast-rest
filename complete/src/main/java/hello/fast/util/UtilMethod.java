@@ -16,7 +16,7 @@ public class UtilMethod {
 						Map<String, Object> newMap =new HashMap<>();
 						newMap.put("key", column);
 						newMap.put("value", data.get(key1));
-						if (newMap.containsKey("time")) {
+						if (data.containsKey("time")) {
 							newMap.put("time", data.get("time"));
 						}
 						if (newMap.containsKey("timestamp")) {

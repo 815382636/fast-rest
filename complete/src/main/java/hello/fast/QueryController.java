@@ -42,7 +42,7 @@ public class QueryController {
             @RequestParam(value="amount", defaultValue = "2000") Long amount,
             @RequestParam(value="ip", required = false) String ip,
             @RequestParam(value="port", required = false) String port,
-			@RequestParam(value = "returnType", defaultValue = "division") String returnType,
+			@RequestParam(value = "returnType", defaultValue = "Integration") String returnType,
             @RequestParam(value="dbtype", defaultValue = "iotdb") String dbtype,
             @RequestParam(value="format", defaultValue = "map") String format
     ) throws SQLException, TException, IoTDBRPCException, IoTDBSessionException {
@@ -168,7 +168,7 @@ public class QueryController {
             @RequestParam(value="error", required = false) Double errorPercent,
             @RequestParam(value="ip", required = false) String ip,
             @RequestParam(value="port", required = false) String port,
-			@RequestParam(value = "returnType", defaultValue = "division") String returnType,
+			@RequestParam(value = "returnType", defaultValue = "Integration") String returnType,
             @RequestParam(value="dbtype", defaultValue = "iotdb") String dbtype,
             @RequestParam(value="format", defaultValue = "map") String format
     ) throws SQLException, TException, IoTDBRPCException, IoTDBSessionException {

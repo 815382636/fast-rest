@@ -37,7 +37,7 @@ public class SampleController {
 			@RequestParam(value = "amount", defaultValue = "2000") Integer amount,
 			@RequestParam(value = "dbtype", defaultValue = "iotdb") String dbtype,
 			@RequestParam(value = "sample", defaultValue = "m4") String sample,
-			@RequestParam(value = "returnType", defaultValue = "division") String returnType,
+			@RequestParam(value = "returnType", defaultValue = "Integration") String returnType,
 			@RequestParam(value = "bucketMethod", defaultValue = "adaption") String bucketMethod,
 			@RequestParam(value = "correlation", defaultValue = "True") Boolean correlation,
 			@RequestParam(value = "valueLimit", required = false) Map<String, Double> valueLimit) throws Exception {
@@ -77,6 +77,7 @@ public class SampleController {
 
 		List<Map<String, Object>> res = new ArrayList<>();
 		if (!correlation) {
+			System.out.println("方法一");
 			SamplingOperator samplingOperator;
 			// 桶内算子
 			if (sample.contains("aggregation"))
@@ -163,7 +164,7 @@ public class SampleController {
 				}
 			}
 		} else {
-
+			System.out.println("方法二");
 			String timelabel = "time";
 			String[] co = new String[columns.size()];
 			columns.toArray(co);

@@ -63,7 +63,7 @@ public class DataController {
             @RequestParam(value="format", defaultValue = "map") String format,
             @RequestParam(value="ip", required = false) String ip,
             @RequestParam(value="port", required = false) String port,
-			@RequestParam(value = "returnType", defaultValue = "division") String returnType,
+			@RequestParam(value = "returnType", defaultValue = "Integration") String returnType,
             @RequestParam(value="dbtype", defaultValue = "iotdb") String dbtype
     ) throws SQLException, IoTDBSessionException, TException, IoTDBRPCException {
         // trim the '"' of the parameters
