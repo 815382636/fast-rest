@@ -134,7 +134,7 @@ public class QueryController {
         System.out.println("-------------");
         if (returnType.contains("Integration")) 
         	res =UtilMethod.change_type(res, columns);
-		
+        System.out.println(res.get(0));
         if(format.equals("map")) return res;
         List<Map<String, Object>> result = new ArrayList<>();
         for(Map<String, Object> map : res){

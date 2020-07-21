@@ -459,7 +459,7 @@ public class LayerThread extends Thread {
 				// 根据throughput触发下一层级
 				if (!hadKickOff && throughput > kickOffThreshold) {
 					hadKickOff = true;
-					String Identifier = String.format("%s,%s,%s,%s,%s", url, database, tableName, columns, salt);
+					String Identifier = String.format("%s,%s,%s,%s,%s", url, database, tableName, columnsStr, salt);
 					String newSubId = DigestUtils.md5DigestAsHex(Identifier.getBytes()).substring(0, 8);
 					System.out.println("kick off the level " + (level + 1) + "<<<<<<!!!!!!!");
 					LayerThread pgsubscribeThread = new LayerThread(url, username, password, database, tableName,
@@ -491,15 +491,6 @@ public class LayerThread extends Thread {
 						dataPoints.size(), sampleDataPoints.size(), dataPoints.size() / sampleDataPoints.size()));
 
 			}
-
-			// 生命在于留白
-			try {
-				long interval = 300L;
-				Thread.sleep(interval);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-
 	        
 
 		}else {
@@ -785,7 +776,7 @@ public class LayerThread extends Thread {
 					// 根据throughput触发下一层级
 					if (!hadKickOff && throughput > kickOffThreshold) {
 						hadKickOff = true;
-						String Identifier = String.format("%s,%s,%s,%s,%s", url, database, tableName, columns, salt);
+						String Identifier = String.format("%s,%s,%s,%s,%s", url, database, tableName, columnsStr, salt);
 						String newSubId = DigestUtils.md5DigestAsHex(Identifier.getBytes()).substring(0, 8);
 						System.out.println("kick off the level " + (level + 1) + "<<<<<<!!!!!!!");
 						LayerThread pgsubscribeThread = new LayerThread(url, username, password, database, tableName,
@@ -818,15 +809,14 @@ public class LayerThread extends Thread {
 
 				}
 
-				// 生命在于留白
-				try {
-					long interval = 300L;
-					Thread.sleep(interval);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
 			}
 		}
-		
+		// 生命在于留白
+		try {
+			long interval = 300L;
+			Thread.sleep(interval);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 }

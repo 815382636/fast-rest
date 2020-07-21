@@ -12,7 +12,7 @@ public class UtilMethod {
 		for (Map<String, Object> data : dataPoints) {
 			for (String key1 : data.keySet()) {
 				for (String column : columns) {
-					if (key1.contains(column)) {
+					if (key1.toLowerCase().contains(column.toLowerCase())) {
 						Map<String, Object> newMap =new HashMap<>();
 						newMap.put("key", column);
 						newMap.put("value", data.get(key1));
