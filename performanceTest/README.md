@@ -1,6 +1,6 @@
 # 自适应采样中间层性能测试
 
-通过计算面积图MS-SSIM、折线图PAE、面积图均方误差、折线图均方误差、折线图MS-SSIM来比较采样结果与原数据的画图效果
+通过计算面积图MS-SSIM、折线图PAE、面积图均方误差、折线图均方误差、折线图MS-SSIM来比较采样结果与原数据的相似性程度
 
 ## 环境建立
 
@@ -22,10 +22,12 @@
 
 ### 运行文件
 
--   运行的文件为py文件中的param_file变量
--   若接口有修改，请修改目录下的以sf开头的txt文件
--   py文件中的param_file变量代表要使用的txt，start_step代表从哪里开始，percent代表timeLimit,alpha代表valueLimit
+-   interfaceTest中 是对比测试单独权重和综合权重单变量MSSSIM、PAE、PMSE指标的测试脚本
+-   interfaceTest1中 是对比测试单独权重和综合权重两个变量MSSSIM、PAE、PMSE指标的测试脚本
+-   运行apprun.py 即可运行测试脚本
+-   脚本生成的折线图、面积图会存在在xxx_png中。MSSSIM、PAE、PMSE会存在目录的txt文件中
 
 ### 运行
 
--   python autorun.py 或 python autorun-color.py
+-   cd interfaceTest 或 cd interfaceTest1
+-   python apprun.py 
