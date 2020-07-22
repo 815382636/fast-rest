@@ -69,7 +69,7 @@
 | password | Jdbc密码 | String | 是 | “root” |
 | database | 数据库名称 | String | 是 | “root” |
 | timeseries | 时间序列名 | String | 是 | “” |
-| columns | 数据列名 | String | 是 | “” |
+| columns | 数据列列表 | List | 是 | ["zt31","zt32"] |
 | timeColumn | 时间列名 | String | 否 | “time” |
 | startTime | 查询起始时间，格式“yyyy-mm-dd | hh-MM-ss(.SSS)” | String | 否 | - |
 | endTime | 查询终止时间，格式“yyyy-mm-dd | hh-MM-ss(.SSS)” | String | 否 | - |
@@ -79,7 +79,7 @@
 | ip | Jdbc网址，如非空将覆盖jdbcurl | String | 否 |  |
 | port | Jdbc端口，如非空将覆盖jdbcurl | String | 否 |  |
 | dbtype | 数据库类型,支持iotdb， | influxdb,postgresql(timescaledb)与kafka等 | String | 是 | “iotdb” |
-
+| returnType | 返回类型，包括多变量组合和key-value类型，（Integration和division），默认Integration | String | 否 | "integration" |
 返回结果：给定时间序列某一列的数据点集合。如果format为map，将以键值对的方式返回；如果format为obj，将以{time:123,column:a, value:1}的形式返回。
 
 
@@ -95,20 +95,22 @@
  | password | Jdbc密码 | String | 是 | “root” |
  | database | 数据库名称 | String | 是 | “root” |
  | timeseries | 时间序列名 | String | 是 | “” |
- | columns | 数据列名 | String | 是 | “” |
+ | columns | 数据列列表 | List | 是 | ["zt31","zt32"] |
  | timeColumn | 时间列名 | String | 否 | “time” |
  | startTime | 查询起始时间，格式“yyyy-mm-dd | hh-MM-ss(.SSS)” | String | 否 | - |
  | endTime | 查询终止时间，格式“yyyy-mm-dd | hh-MM-ss(.SSS)” | String | 否 | - |
  | condition | 查询条件 | String | 否 | - |
  | sample | 采样算子参数，支持“m4”“aggregation”“random”“outlier” | 算子 | String | 是 | - |
- | timeLimit | 横轴离群值阈值 | Double | 是 | - |
- | valueLimit | 纵轴离群值阈值 | Double | 是 | - |
+ | valueLimit | 纵轴离群值阈值 | Map | 是 | {“ZT31”:200, ”ZT32”:300,”time”:100000000000} |
  | sql | 查询语句，如非空将覆盖上述查询条件 | String | 否 |  |
  | ip | Jdbc网址，如非空将覆盖jdbcurl | String | 否 |  |
  | port | Jdbc端口，如非空将覆盖jdbcurl | String | 否 |  |
  | amount | 采样结果数目 | Integer | 否 | 2000 |
  | format | 结果返回形式，支持map与obj两种形式 | String | 否 | “map” |
  | dbtype | 数据库类型,支持iotdb， | influxdb,postgresql(timescaledb)与kafka等 | String | 是 | “iotdb” |
+ | bucketMethod | 分桶方法，枚举类型[uniform,daption],包括均匀分桶和自适应分桶，默认是adaption | String | 否 | - |
+ | correlation | 是否使用联合权重，默认使用 | Boolean | 否 | - |
+ | returnType | 返回类型，包括多变量组合和key-value类型，（Integration和division），默认Integration | String | 否 | "integration" |
 
 返回结果：给定时间序列某一列的数据点集合
 
@@ -126,18 +128,18 @@
 | password | Jdbc密码 | String | 是 | “root” |
 | database | 数据库名称 | String | 是 | - |
 | timeseries | 时间序列名 | String | 是 | - |
-| columns | 数据列名 | String | 是 | “” |
+| columns | 数据列列表 | List | 是 | ["zt31","zt32"] |
 | timeColumn | 时间列名 | String | 否 | “time” |
 | startTime | 订阅起始时间，格式“yyyy-mm-dd | hh-MM-ss(.SSS)” | String | 否 | - |
 | conditon | 查询条件 | String | 否 | - |
-| timeLimit | 横轴阈值 | Double | 否 | - |
-| valueLimit | 纵轴阈值 | Double | 否 | - |
+| valueLimit | 纵轴离群值阈值 | Map | 是 | {“ZT31”:200, ”ZT32”:300,”time”:100000000000} |
 | ratio | 采样比 | Integer | 否 | - |
 | sample | 采样算子参数，支持“m4”“aggregation”“random”“outlier” | 算子 | String | 是 | - |
 | ip | Jdbc网址，如非空将覆盖jdbcurl | String | 否 |  |
 | port | Jdbc端口，如非空将覆盖jdbcurl | String | 否 |  |
 | format | 数据返回形式 | String | 否 | - |
 | dbtype | 数据库类型,支持iotdb， | influxdb,postgresql(timescaledb)与kafka等 | String | 否 | - |
+| correlation | 是否使用联合权重，默认使用 | Boolean | 否 | - |
 
 返回结果：时序数据订阅id
 
@@ -152,13 +154,14 @@
 | password | Jdbc密码 | String | 是 | “root” |
 | database | 数据库 | String | 是 |  |
 | timeseries | 时间序列名称 | String | 是 | - |
-| columns | 数据列名 | String | 是 | “” |
+| columns | 数据列列表 | List | 是 | ["zt31","zt32"] |
 | timeColumn | 时间列名 | String | 否 | “time” |
 | startTime | 查询起始时间，格式“yyyy-mm-dd | hh-MM-ss(.SSS)” | String | 否 | - |
 | endTime | 查询终止时间，格式“yyyy-mm-dd | hh-MM-ss(.SSS)” | String | 否 | - |
 | amount | 样本数目 | Long | 是 |  |
 | format | 结果返回形式，支持map与obj两种形式 | String | 否 | “map” |
 | dbtype | 数据库类型,支持iotdb， | influxdb,postgresql(timescaledb)与kafka等 | String | 是 | “iotdb” |
+| returnType | 返回类型，包括多变量组合和key-value类型，（Integration和division），默认Integration | String | 否 | "integration" |
 
 返回结果：给定时间序列某一列的数据点集合
 
@@ -173,13 +176,14 @@
  | password | Jdbc密码 | String | 是 | “root” |
  | database | 数据库 | String | 是 |  |
  | timeseries | 时间序列名称 | String | 是 | - |
- | columns | 数据列名 | String | 是 | “” |
+ | columns | 数据列列表 | List | 是 | ["zt31","zt32"] |
  | timeColumn | 时间列名 | String | 否 | “time” |
  | startTime | 查询起始时间格式“yyyy-mm-dd | hh-MM-ss(.SSS)” | String | 否 | - |
  | endTime | 查询终止时间格式“yyyy-mm-dd | hh-MM-ss(.SSS)” | String | 否 | - |
  | error | 样本误差百分比 | Double | 是 |  |
  | format | 结果返回形式，支持map与obj两种形式 | String | 否 | “map” |
  | dbtype | 数据库类型,支持iotdb， | influxdb,postgresql(timescaledb)与kafka等 | String | 是 | “iotdb” | | 
+ | returnType | 返回类型，包括多变量组合和key-value类型，（Integration和division），默认Integration | String | 否 | "integration" |
 
 返回结果：给定时间序列某一列的数据点集合
 

@@ -811,12 +811,6 @@ public class LayerThread extends Thread {
 
 			}
 		}
-		// 生命在于留白
-		try {
-			long interval = 300L;
-			Thread.sleep(interval);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		
 	}
 }
