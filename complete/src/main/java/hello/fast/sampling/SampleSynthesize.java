@@ -14,7 +14,7 @@ public class SampleSynthesize implements SamplingSynthesize {
 
         for(Bucket bucket : buckets){
             List<Map<String, Object>> datapoints = bucket.getDataPoints();
-            if(datapoints.size() <= labels.length){
+            if(datapoints.size() <= 2*labels.length){
                 res.addAll(datapoints);
                 continue;
             }

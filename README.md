@@ -100,7 +100,7 @@
  | startTime | 查询起始时间，格式“yyyy-mm-dd | hh-MM-ss(.SSS)” | String | 否 | - |
  | endTime | 查询终止时间，格式“yyyy-mm-dd | hh-MM-ss(.SSS)” | String | 否 | - |
  | condition | 查询条件 | String | 否 | - |
- | sample | 采样算子参数，支持“m4”“aggregation”“random”“outlier” | 算子 | String | 是 | - |
+ | sample | 采样算子参数，支持“m4”“aggregation”“random”“outlier”“weight” | 算子 | String | 是 | - |
  | valueLimit | 纵轴离群值阈值 | Map | 是 | {“ZT31”:200, ”ZT32”:300,”time”:100000000000} |
  | sql | 查询语句，如非空将覆盖上述查询条件 | String | 否 |  |
  | ip | Jdbc网址，如非空将覆盖jdbcurl | String | 否 |  |
@@ -134,7 +134,7 @@
 | conditon | 查询条件 | String | 否 | - |
 | valueLimit | 纵轴离群值阈值 | Map | 是 | {“ZT31”:200, ”ZT32”:300,”time”:100000000000} |
 | ratio | 采样比 | Integer | 否 | - |
-| sample | 采样算子参数，支持“m4”“aggregation”“random”“outlier” | 算子 | String | 是 | - |
+| sample | 采样算子参数，支持“m4”“aggregation”“random”“outlier”“weight” | 算子 | String | 是 | - |
 | ip | Jdbc网址，如非空将覆盖jdbcurl | String | 否 |  |
 | port | Jdbc端口，如非空将覆盖jdbcurl | String | 否 |  |
 | format | 数据返回形式 | String | 否 | - |

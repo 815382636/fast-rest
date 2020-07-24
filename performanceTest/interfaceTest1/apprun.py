@@ -99,7 +99,8 @@ if start_step <= 2:
         time_label = "time"
         dbtype = parameter["dbtype"]
         for l in range(0, len(parameter["columns"])):
-            value_labels.append(parameter["columns"][l].lower())
+            if parameter["columns"][l].lower() not in value_labels:
+                value_labels.append(parameter["columns"][l].lower())
 
         if i == 0:
             for value_label in value_labels:

@@ -86,6 +86,8 @@ public class SampleController {
 				samplingOperator = new Sample();
 			else if (sample.contains("outlier"))
 				samplingOperator = new Outlier();
+			else if (sample.contains("weight"))
+				samplingOperator = new WeightSample();
 			else
 				samplingOperator = new M4();
 
@@ -189,6 +191,8 @@ public class SampleController {
 				samplingsynthesize = new SampleSynthesize();
 			else if (sample.contains("outlier"))
 				samplingsynthesize = new OutlierSynthesize();
+			else if (sample.contains("weight"))
+				samplingsynthesize = new WeightSynthesize();
 			else
 				samplingsynthesize = new M4Synthesize();
 			long dataPointCount = DataController._dataPointsCount(url, username, password, database, timeseries,
@@ -272,6 +276,8 @@ public class SampleController {
 			samplingOperator = new Sample();
 		else if (sample.contains("outlier"))
 			samplingOperator = new Outlier();
+		else if (sample.contains("weight"))
+			samplingOperator = new WeightSample();
 		else
 			samplingOperator = new M4();
 
@@ -288,6 +294,8 @@ public class SampleController {
 			samplingSynthesize = new SampleSynthesize();
 		else if (sample.contains("outlier"))
 			samplingSynthesize = new OutlierSynthesize();
+		else if (sample.contains("weight"))
+			samplingSynthesize = new WeightSynthesize();
 		else
 			samplingSynthesize = new M4Synthesize();
 

@@ -13,6 +13,9 @@ http://127.0.0.1:9091/sample
 sample-outlier-correlation
 http://127.0.0.1:9091/sample
 {"amount":500,"columns":["ZT31"],"database":"root.group_9","dbtype":"iotdb","endTime":"2019-08-18 00:00:00","password":"root","startTime":"2019-08-16 00:00:00","timeseries":"1701","url":"jdbc:iotdb://101.6.15.201:6667/","username":"root","conditions":" and ZT31 > 0 ","sample":"outlier","correlation":"true","returnType":"division"}
+sample-weight-correlation
+http://127.0.0.1:9091/sample
+{"amount":500,"columns":["ZT31"],"database":"root.group_9","dbtype":"iotdb","endTime":"2019-08-18 00:00:00","password":"root","startTime":"2019-08-16 00:00:00","timeseries":"1701","url":"jdbc:iotdb://101.6.15.201:6667/","username":"root","conditions":" and ZT31 > 0 ","sample":"weight","correlation":"true","returnType":"division"}
 sample-m4
 http://127.0.0.1:9091/sample
 {"amount":500,"columns":["ZT31"],"database":"root.group_9","dbtype":"iotdb","endTime":"2019-08-18 00:00:00","password":"root","startTime":"2019-08-16 00:00:00","timeseries":"1701","url":"jdbc:iotdb://101.6.15.201:6667/","username":"root","conditions":" and ZT31 > 0 ","sample":"m4","correlation":"false","returnType":"division"}
@@ -25,3 +28,6 @@ http://127.0.0.1:9091/sample
 sample-outlier
 http://127.0.0.1:9091/sample
 {"amount":500,"columns":["ZT31"],"database":"root.group_9","dbtype":"iotdb","endTime":"2019-08-18 00:00:00","password":"root","startTime":"2019-08-16 00:00:00","timeseries":"1701","url":"jdbc:iotdb://101.6.15.201:6667/","username":"root","conditions":" and ZT31 > 0 ","sample":"outlier","correlation":"false","returnType":"division"}
+sample-weight
+http://127.0.0.1:9091/sample
+{"amount":500,"columns":["ZT31"],"database":"root.group_9","dbtype":"iotdb","endTime":"2019-08-18 00:00:00","password":"root","startTime":"2019-08-16 00:00:00","timeseries":"1701","url":"jdbc:iotdb://101.6.15.201:6667/","username":"root","conditions":" and ZT31 > 0 ","sample":"weight","correlation":"false","returnType":"division"}
