@@ -36,7 +36,7 @@ public class SampleController {
 			@RequestParam(value = "port", required = false) String port,
 			@RequestParam(value = "amount", defaultValue = "2000") Integer amount,
 			@RequestParam(value = "dbtype", defaultValue = "iotdb") String dbtype,
-			@RequestParam(value = "sample", defaultValue = "m4") String sample,
+			@RequestParam(value = "sample", defaultValue = "weight") String sample,
 			@RequestParam(value = "returnType", defaultValue = "Integration") String returnType,
 			@RequestParam(value = "bucketMethod", defaultValue = "adaption") String bucketMethod,
 			@RequestParam(value = "correlation", defaultValue = "True") Boolean correlation,
@@ -76,8 +76,43 @@ public class SampleController {
 			throws SQLException, TException, IoTDBRPCException, IoTDBSessionException {
 
 		List<Map<String, Object>> res = new ArrayList<>();
+		String timelabel = "time";
+		String columnsStr ="";
+        for (int k = 0; k < columns.size(); k++) {
+        	columnsStr +=columns.get(k);
+			if(k !=columns.size()-1) {
+				columnsStr +=",";
+			}
+		}
+		String[] co = new String[columns.size()];
+		columns.toArray(co);
+		String[] iotdbCo = new String[co.length];
+		for (int j = 0; j < iotdbCo.length; j++) {
+			iotdbCo[j] = database + "." + timeseries + "." + co[j];
+		}
+		String[] labels = dbtype.equals("iotdb") ? iotdbCo : co;
+        
+        long dataPointCount = DataController._dataPointsCount(url, username, password, database, timeseries,
+				columns.get(0), timecolumn, starttime, endtime, conditions, query, format, ip, port, dbtype);
+
+		long freememery = Runtime.getRuntime().freeMemory();
+		long batchLimit = freememery / 10000L;
+		if (batchLimit <100000) {
+			batchLimit =100000;
+		}else {
+			batchLimit =200000;
+		}
+			
+		if (!conditions.contains("limit"))
+			conditions = conditions + " limit " + batchLimit;
+		if (dbtype.equals("postgresql") || dbtype.equals("timescaledb"))
+			conditions = " order by time " + conditions;
+		amount = (int) (amount * batchLimit / dataPointCount);
+		if (amount ==0) {
+			amount =1;
+		}
+
 		if (!correlation) {
-			System.out.println("方法一");
 			SamplingOperator samplingOperator;
 			// 桶内算子
 			if (sample.contains("aggregation"))
@@ -90,41 +125,11 @@ public class SampleController {
 				samplingOperator = new WeightSample();
 			else
 				samplingOperator = new M4();
-
-			String typeTime = starttime;
-
-//          对多个column进行处理
-			String[] co = new String[columns.size()];
-			columns.toArray(co);
-			String columnsStr ="";
-	        for (int k = 0; k < columns.size(); k++) {
-	        	columnsStr +=columns.get(k);
-				if(k !=columns.size()-1) {
-					columnsStr +=",";
-				}
-			}
 	        
 			for (int i = 0; i < co.length; i++) {
-				long dataPointCount = DataController._dataPointsCount(url, username, password, database, timeseries,
-						co[i], timecolumn, starttime, endtime, conditions, query, format, ip, port, dbtype);
-				long freememery = Runtime.getRuntime().freeMemory();
-//                每一批次最多查询的数据    batchlimit:21088
-				long batchLimit = freememery / 10000L;
-				if (!conditions.contains("limit"))
-					conditions = conditions + " limit " + batchLimit;
-				if (dbtype.equals("postgresql") || dbtype.equals("timescaledb"))
-					conditions = " order by time " + conditions;
-//                每一批次所要拿到的采样的数目
-				amount = (int) (amount * batchLimit / dataPointCount);
-				if (amount ==0) {
-					amount =1;
-				}
-//            	System.out.println("batchlimit:"+batchLimit);
-
 				String iotdbLabel = database + "." + timeseries + "." + co[i];
 				String label = dbtype.equals("iotdb") ? iotdbLabel : co[i];
-				String timelabel = "time";
-				String latestTime = typeTime;
+				String latestTime = starttime;
 				
 				while (true) {
 					// 先根据采样算子分桶，"simpleXXX"为等间隔分桶，否则为自适应分桶
@@ -165,24 +170,7 @@ public class SampleController {
 						break;
 				}
 			}
-		} else {
-			System.out.println("方法二");
-			String timelabel = "time";
-			String[] co = new String[columns.size()];
-			columns.toArray(co);
-			String[] iotdbCo = new String[co.length];
-			for (int j = 0; j < iotdbCo.length; j++) {
-				iotdbCo[j] = database + "." + timeseries + "." + co[j];
-			}
-			String[] labels = dbtype.equals("iotdb") ? iotdbCo : co;
-			String columnsStr ="";
-	        for (int k = 0; k < columns.size(); k++) {
-	        	columnsStr +=columns.get(k);
-				if(k !=columns.size()-1) {
-					columnsStr +=",";
-				}
-			}
-			
+		} else {			
 			SamplingSynthesize samplingsynthesize;
 			// 桶内算子
 			if (sample.contains("aggregation"))
@@ -195,22 +183,8 @@ public class SampleController {
 				samplingsynthesize = new WeightSynthesize();
 			else
 				samplingsynthesize = new M4Synthesize();
-			long dataPointCount = DataController._dataPointsCount(url, username, password, database, timeseries,
-					columns.get(0), timecolumn, starttime, endtime, conditions, query, format, ip, port, dbtype);
-
-			long freememery = Runtime.getRuntime().freeMemory();
-			long batchLimit = freememery / 10000L;
-			if (!conditions.contains("limit"))
-				conditions = conditions + " limit " + batchLimit;
-			if (dbtype.equals("postgresql") || dbtype.equals("timescaledb"))
-				conditions = " order by time " + conditions;
-			amount = (int) (amount * batchLimit / dataPointCount);
-			if (amount ==0) {
-				amount =1;
-			}
-//			System.out.println("总长度："+dataPointCount);
+			
 			String latestTime = starttime;
-//			System.out.println("开始时间"+latestTime);
 			while (true) {
 
 				List<Bucket> buckets = BucketsController.correlation_buckets(url, username, password, database, timeseries, columnsStr, timecolumn, latestTime, endtime, conditions, query, format, ip, port, amount, dbtype, valueLimit, labels);
@@ -226,7 +200,6 @@ public class SampleController {
 				} else {
 					newestTime = lastBucket.get(lastBucket.size() - 1).get("time").toString();
 				}
-//				System.out.println("中间时间+"+newestTime);
 				if (latestTime.equals(newestTime)) 
 					break;
 				else

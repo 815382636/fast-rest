@@ -180,7 +180,6 @@ public class LayerThread extends Thread {
 
 		if (correlation) {
 	        String weightLabel = dbtype.equals("iotdb") ? database + "." + timeseries + ".weight" : "weight";
-	        System.out.println(weightLabel);
 	        String timelabel = "time";
 			String[] iotdbCo = new String[co.length];
 			String[] allIotdbLabel = new String[co.length];
@@ -250,9 +249,6 @@ public class LayerThread extends Thread {
 	                dataPoint.put("weight", dataPoint.get(weightLabel));
 	            }
 	        }
-
-	        System.out.println(dataPoints.size());
-	        System.out.println(weights.size());
 
 	        if(bucketSum == null) bucketSum = BucketsController.corralation_bucketSum(dataPoints, labels, dataPoints.size()/ratio);
 	        System.out.println("level " + level + " bucketSum:" + bucketSum);
