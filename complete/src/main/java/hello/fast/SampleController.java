@@ -94,24 +94,27 @@ public class SampleController {
         
         long dataPointCount = DataController._dataPointsCount(url, username, password, database, timeseries,
 				columns.get(0), timecolumn, starttime, endtime, conditions, query, format, ip, port, dbtype);
-
+        System.out.println("dataPointCount:"+dataPointCount);
+        if (dataPointCount ==0) {
+        	return res;
+		}
 		long freememery = Runtime.getRuntime().freeMemory();
 		long batchLimit = freememery / 10000L;
-		if (batchLimit <100000) {
-			batchLimit =100000;
-		}else {
-			batchLimit =200000;
-		}
-			
+//		if (batchLimit <100000) {
+//			batchLimit =100000;
+//		}else {
+//			batchLimit =200000;
+//		}
+		if (dbtype.equals("postgresql") || dbtype.equals("timescaledb"))
+			conditions =conditions + " order by time " ;
 		if (!conditions.contains("limit"))
 			conditions = conditions + " limit " + batchLimit;
-		if (dbtype.equals("postgresql") || dbtype.equals("timescaledb"))
-			conditions = " order by time " + conditions;
+
 		amount = (int) (amount * batchLimit / dataPointCount);
 		if (amount ==0) {
 			amount =1;
 		}
-
+		System.out.println("amount:"+amount);
 		if (!correlation) {
 			SamplingOperator samplingOperator;
 			// 桶内算子

@@ -1,0 +1,11 @@
+sample-weight-1500-line.png,6.556
+sample-weight-correlation-500-line.png,2.574
+sample-weight-1000-line.png,13.865
+sample-weight-2000-line.png,5.066
+sample-weight-750-line.png,43.355
+sample-weight-correlation-2000-line.png,0.447
+sample-weight-correlation-750-line.png,1.5
+subway-data-line.png,0.0
+sample-weight-correlation-1000-line.png,0.831
+sample-weight-500-line.png,68.103
+sample-weight-correlation-1500-line.png,0.548

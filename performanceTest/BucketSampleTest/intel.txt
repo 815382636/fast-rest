@@ -1,0 +1,78 @@
+intel-data
+http://127.0.0.1:9091/data
+{"startTime":"2004-03-01 00:00:00","endTime":"2004-03-23 00:00:00","columns":["temperature"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"intel","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","returnType":"division","conditions":"and moteid = 1"}
+intel-m4-500
+http://127.0.0.1:9091/sample
+{"amount":500,"sample":"m4","correlation":"true","startTime":"2004-03-01 00:00:00","endTime":"2004-03-23 00:00:00","columns":["temperature"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"intel","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","returnType":"division","conditions":"and moteid = 1"}
+intel-aggregation-500
+http://127.0.0.1:9091/sample
+{"amount":500,"sample":"aggregation","correlation":"true","startTime":"2004-03-01 00:00:00","endTime":"2004-03-23 00:00:00","columns":["temperature"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"intel","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","returnType":"division","conditions":"and moteid = 1"}
+intel-sample-500
+http://127.0.0.1:9091/sample
+{"amount":500,"sample":"sample","correlation":"true","startTime":"2004-03-01 00:00:00","endTime":"2004-03-23 00:00:00","columns":["temperature"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"intel","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","returnType":"division","conditions":"and moteid = 1"}
+intel-outlier-500
+http://127.0.0.1:9091/sample
+{"amount":500,"sample":"outlier","correlation":"true","startTime":"2004-03-01 00:00:00","endTime":"2004-03-23 00:00:00","columns":["temperature"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"intel","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","returnType":"division","conditions":"and moteid = 1"}
+intel-weight-500
+http://127.0.0.1:9091/sample
+{"amount":500,"sample":"weight","correlation":"true","startTime":"2004-03-01 00:00:00","endTime":"2004-03-23 00:00:00","columns":["temperature"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"intel","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","returnType":"division","conditions":"and moteid = 1"}
+intel-m4-750
+http://127.0.0.1:9091/sample
+{"amount":750,"sample":"m4","correlation":"true","startTime":"2004-03-01 00:00:00","endTime":"2004-03-23 00:00:00","columns":["temperature"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"intel","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","returnType":"division","conditions":"and moteid = 1"}
+intel-aggregation-750
+http://127.0.0.1:9091/sample
+{"amount":750,"sample":"aggregation","correlation":"true","startTime":"2004-03-01 00:00:00","endTime":"2004-03-23 00:00:00","columns":["temperature"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"intel","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","returnType":"division","conditions":"and moteid = 1"}
+intel-sample-750
+http://127.0.0.1:9091/sample
+{"amount":750,"sample":"sample","correlation":"true","startTime":"2004-03-01 00:00:00","endTime":"2004-03-23 00:00:00","columns":["temperature"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"intel","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","returnType":"division","conditions":"and moteid = 1"}
+intel-outlier-750
+http://127.0.0.1:9091/sample
+{"amount":750,"sample":"outlier","correlation":"true","startTime":"2004-03-01 00:00:00","endTime":"2004-03-23 00:00:00","columns":["temperature"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"intel","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","returnType":"division","conditions":"and moteid = 1"}
+intel-weight-750
+http://127.0.0.1:9091/sample
+{"amount":750,"sample":"weight","correlation":"true","startTime":"2004-03-01 00:00:00","endTime":"2004-03-23 00:00:00","columns":["temperature"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"intel","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","returnType":"division","conditions":"and moteid = 1"}
+intel-m4-1000
+http://127.0.0.1:9091/sample
+{"amount":1000,"sample":"m4","correlation":"true","startTime":"2004-03-01 00:00:00","endTime":"2004-03-23 00:00:00","columns":["temperature"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"intel","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","returnType":"division","conditions":"and moteid = 1"}
+intel-aggregation-1000
+http://127.0.0.1:9091/sample
+{"amount":1000,"sample":"aggregation","correlation":"true","startTime":"2004-03-01 00:00:00","endTime":"2004-03-23 00:00:00","columns":["temperature"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"intel","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","returnType":"division","conditions":"and moteid = 1"}
+intel-sample-1000
+http://127.0.0.1:9091/sample
+{"amount":1000,"sample":"sample","correlation":"true","startTime":"2004-03-01 00:00:00","endTime":"2004-03-23 00:00:00","columns":["temperature"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"intel","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","returnType":"division","conditions":"and moteid = 1"}
+intel-outlier-1000
+http://127.0.0.1:9091/sample
+{"amount":1000,"sample":"outlier","correlation":"true","startTime":"2004-03-01 00:00:00","endTime":"2004-03-23 00:00:00","columns":["temperature"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"intel","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","returnType":"division","conditions":"and moteid = 1"}
+intel-weight-1000
+http://127.0.0.1:9091/sample
+{"amount":1000,"sample":"weight","correlation":"true","startTime":"2004-03-01 00:00:00","endTime":"2004-03-23 00:00:00","columns":["temperature"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"intel","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","returnType":"division","conditions":"and moteid = 1"}
+intel-m4-1500
+http://127.0.0.1:9091/sample
+{"amount":1500,"sample":"m4","correlation":"true","startTime":"2004-03-01 00:00:00","endTime":"2004-03-23 00:00:00","columns":["temperature"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"intel","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","returnType":"division","conditions":"and moteid = 1"}
+intel-aggregation-1500
+http://127.0.0.1:9091/sample
+{"amount":1500,"sample":"aggregation","correlation":"true","startTime":"2004-03-01 00:00:00","endTime":"2004-03-23 00:00:00","columns":["temperature"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"intel","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","returnType":"division","conditions":"and moteid = 1"}
+intel-sample-1500
+http://127.0.0.1:9091/sample
+{"amount":1500,"sample":"sample","correlation":"true","startTime":"2004-03-01 00:00:00","endTime":"2004-03-23 00:00:00","columns":["temperature"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"intel","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","returnType":"division","conditions":"and moteid = 1"}
+intel-outlier-1500
+http://127.0.0.1:9091/sample
+{"amount":1500,"sample":"outlier","correlation":"true","startTime":"2004-03-01 00:00:00","endTime":"2004-03-23 00:00:00","columns":["temperature"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"intel","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","returnType":"division","conditions":"and moteid = 1"}
+intel-weight-1500
+http://127.0.0.1:9091/sample
+{"amount":1500,"sample":"weight","correlation":"true","startTime":"2004-03-01 00:00:00","endTime":"2004-03-23 00:00:00","columns":["temperature"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"intel","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","returnType":"division","conditions":"and moteid = 1"}
+intel-m4-2000
+http://127.0.0.1:9091/sample
+{"amount":2000,"sample":"m4","correlation":"true","startTime":"2004-03-01 00:00:00","endTime":"2004-03-23 00:00:00","columns":["temperature"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"intel","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","returnType":"division","conditions":"and moteid = 1"}
+intel-aggregation-2000
+http://127.0.0.1:9091/sample
+{"amount":2000,"sample":"aggregation","correlation":"true","startTime":"2004-03-01 00:00:00","endTime":"2004-03-23 00:00:00","columns":["temperature"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"intel","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","returnType":"division","conditions":"and moteid = 1"}
+intel-sample-2000
+http://127.0.0.1:9091/sample
+{"amount":2000,"sample":"sample","correlation":"true","startTime":"2004-03-01 00:00:00","endTime":"2004-03-23 00:00:00","columns":["temperature"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"intel","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","returnType":"division","conditions":"and moteid = 1"}
+intel-outlier-2000
+http://127.0.0.1:9091/sample
+{"amount":2000,"sample":"outlier","correlation":"true","startTime":"2004-03-01 00:00:00","endTime":"2004-03-23 00:00:00","columns":["temperature"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"intel","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","returnType":"division","conditions":"and moteid = 1"}
+intel-weight-2000
+http://127.0.0.1:9091/sample
+{"amount":2000,"sample":"weight","correlation":"true","startTime":"2004-03-01 00:00:00","endTime":"2004-03-23 00:00:00","columns":["temperature"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"intel","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","returnType":"division","conditions":"and moteid = 1"}

@@ -1,0 +1,11 @@
+sample-weight-correlation-1000-area.png,0.9996774
+subway-data-area.png,1.0
+sample-weight-correlation-1500-area.png,0.9998207
+sample-weight-500-area.png,0.97364473
+sample-weight-correlation-750-area.png,0.9994938
+sample-weight-correlation-2000-area.png,0.99983424
+sample-weight-750-area.png,0.9770727
+sample-weight-2000-area.png,0.99580264
+sample-weight-correlation-500-area.png,0.9988353
+sample-weight-1500-area.png,0.9934775
+sample-weight-1000-area.png,0.9907572

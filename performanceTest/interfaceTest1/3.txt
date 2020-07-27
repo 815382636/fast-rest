@@ -1,0 +1,11 @@
+sample-outlier-correlation-2000-line.png,0.224
+sample-outlier-2000-line.png,2.886
+sample-outlier-correlation-1500-line.png,0.459
+sample-outlier-1000-line.png,17.556
+sample-outlier-correlation-500-line.png,7.504
+sample-outlier-1500-line.png,4.625
+sample-outlier-750-line.png,22.467
+sample-outlier-correlation-1000-line.png,6.173
+subway-data-line.png,0.0
+sample-outlier-500-line.png,82.01
+sample-outlier-correlation-750-line.png,6.276

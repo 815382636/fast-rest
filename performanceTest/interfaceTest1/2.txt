@@ -1,0 +1,11 @@
+sample-weight-1500-line.png,0.07354568207813839
+sample-weight-correlation-500-line.png,0.06927932337895482
+sample-weight-1000-line.png,0.07460642716344035
+sample-weight-2000-line.png,0.07126953274379311
+sample-weight-750-line.png,0.07472556298086863
+sample-weight-correlation-2000-line.png,0.06953645507797734
+sample-weight-correlation-750-line.png,0.0695990204771677
+subway-data-line.png,0.07024593944518731
+sample-weight-correlation-1000-line.png,0.07090029929369801
+sample-weight-500-line.png,0.07450176981694612
+sample-weight-correlation-1500-line.png,0.06925309978645378

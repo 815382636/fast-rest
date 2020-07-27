@@ -37,7 +37,6 @@ public class Outlier implements SamplingOperator {
 
                 Map<String, Object> data = datapoints.get(i);
                 double weight = (double)data.get("weight");
-
                 double sim = 0.0;
                 for(int j = i; j > i - theta && j >= 0; j--) {
                     double diff;

@@ -218,7 +218,10 @@ public class DataController {
                     (starttime == null ? "" : " WHERE time >= '" + starttime + "'") +
                     (endtime   == null ? "" : " AND time < '" + endtime + "'") +
                     (conditions == null ? "" : " " + conditions);
+            System.out.println("------------");
+            System.out.println("conditions:"+conditions);
             System.out.println(sql);
+            System.out.println("------------");
             sql = sql.replace("time", timecolumn);
             ResultSet resultSet = pgtool.query(connection, sql);
 
@@ -364,7 +367,7 @@ public class DataController {
     ) throws SQLException {
 
         Long res = 0L;
-//        System.out.println(dbtype);
+        System.out.println(dbtype);
 
         if(dbtype.toLowerCase().equals("iotdb") || dbtype.toLowerCase().equals("session")){
             if(ip != null && port != null) url = String.format("jdbc:iotdb://%s:%s/", ip, port);
@@ -381,7 +384,7 @@ public class DataController {
                     (starttime == null ? "" : " WHERE time >= " + starttime) +
                     (endtime   == null ? "" : " AND time < " + endtime) +
                     (conditions == null ? "" : conditions);
-//            System.out.println(sql);
+            System.out.println(sql);
             ResultSet resultSet = statement.executeQuery(sql);
 
             if (resultSet != null) {

@@ -156,8 +156,8 @@ public class BucketsController {
 			String timeseries, String columns, String timecolumn, String starttime, String endtime, String conditions,
 			String query, String format, String ip, String port, Integer amount, String dbtype)
 			throws SQLException, TException, IoTDBRPCException, IoTDBSessionException {
-		List<Map<String, Object>> linkedDataPoints = DataController._dataPoints(url, username, password, database,
-				timeseries, timecolumn, columns, starttime, endtime, conditions, query, "map", ip, port, dbtype);
+		List<Map<String, Object>> linkedDataPoints = DataController._dataPoints(url, username, password, database, timeseries,
+				columns, timecolumn, starttime, endtime, conditions, query, "map", ip, port, dbtype);
 		if (linkedDataPoints.size() < 2)
 			return null;
 
