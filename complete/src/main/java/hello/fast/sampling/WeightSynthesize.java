@@ -11,7 +11,7 @@ public class WeightSynthesize implements SamplingSynthesize{
 	@Override
 	public List<Map<String, Object>> sample(List<Bucket> buckets, String timelabel, String[] labels) {
 		List<Map<String, Object>> res = new ArrayList<>();
-
+		System.out.println("桶数量："+buckets.size());
         for(Bucket bucket : buckets){
             List<Map<String, Object>> datapoints = bucket.getDataPoints();
             if(datapoints.size() <= 4){
@@ -30,8 +30,7 @@ public class WeightSynthesize implements SamplingSynthesize{
             }
             for (int i = 0; i < 4; i++) {
             	res.add(res1.get(i));
-            }            
-            
+            }                  
         }
         
 		return res;

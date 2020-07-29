@@ -13,6 +13,7 @@ public class OutlierSynthesize implements SamplingSynthesize {
 	public List<Map<String, Object>> sample(List<Bucket> buckets, String timelabel, String[] labels) {
 		SamplingOperator samplingOperator = new Outlier();
 		List<Map<String, Object>> res = new ArrayList<>();
+        System.out.println("labels.length"+labels.length);
 
 		for (int i = 0; i < labels.length; i++) {
 			res.addAll(samplingOperator.sample(buckets, timelabel, labels[i]));

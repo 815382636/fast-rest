@@ -1,6 +1,6 @@
 package hello.fast;
 
-import hello.fast.util.OutlierDetection;
+//import hello.fast.util.OutlierDetection;
 import org.apache.iotdb.rpc.IoTDBRPCException;
 import org.apache.iotdb.session.IoTDBSessionException;
 import org.apache.thrift.TException;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.SQLException;
-import java.sql.Timestamp;
+//import java.sql.Timestamp;
 import java.util.*;
 import hello.fast.obj.Bucket;
 
@@ -127,8 +127,8 @@ public class BucketsController {
 		Long timestampRange = lastTimestamp - firstTimestamp;
 		Long timeinteval = timestampRange / amount * 4;
 
-		String iotdbLabel = database + "." + timeseries + "." + columns;
-		String label = dbtype.equals("iotdb") ? iotdbLabel : columns;
+//		String iotdbLabel = database + "." + timeseries + "." + columns;
+//		String label = dbtype.equals("iotdb") ? iotdbLabel : columns;
 		String timelabel = "time";
 
 		for (Map<String, Object> dataPoint : dataPoints)
@@ -168,8 +168,8 @@ public class BucketsController {
 		Long timestampRange = lastTimestamp - firstTimestamp;
 		Long timeinteval = timestampRange / amount * 4;
 
-		String iotdbLabel = database + "." + timeseries + "." + column;
-		String label = dbtype.equals("iotdb") ? iotdbLabel : column;
+//		String iotdbLabel = database + "." + timeseries + "." + column;
+//		String label = dbtype.equals("iotdb") ? iotdbLabel : column;
 		String timelabel = "time";
 
 		for (Map<String, Object> dataPoint : dataPoints)
@@ -238,7 +238,7 @@ public class BucketsController {
 			weights.add((Double) dataPoint.get("weight"));
 
 		// 二分查找
-		int n = amount == null ? 1000 : amount / (labels.length + 1) * 2;
+		int n = amount == null ? 1000 : amount / ((labels.length + 1) * 2);
 		long lo = 0, hi = weights.size() * 100;
 		while (lo < hi) {
 			long mid = lo + (hi - lo >> 1);

@@ -20,7 +20,6 @@ public class M4 implements SamplingOperator {
                 res.addAll(datapoints);
                 continue;
             }
-
             res.add(datapoints.get(0));
             Map<String, Object> maxi = datapoints.get(0);
             Map<String, Object> mini = datapoints.get(0);

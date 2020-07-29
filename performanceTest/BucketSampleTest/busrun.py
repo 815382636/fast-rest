@@ -27,7 +27,7 @@ pixel_postfix = "-pixel.png"
 
 
 start_step =0
-param_file ="intel.txt"
+param_file ="bus.txt"
 start_time = "2011-04-03 00:00:00"
 end_time = "2011-05-05 00:00:00"
 min_value=0

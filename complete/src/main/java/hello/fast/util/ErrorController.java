@@ -129,9 +129,6 @@ public class ErrorController {
 
         int lastIndex = 1;
         int newIndex;
-        double errorSum =0.0;
-        double weightSum =0.0;
-        double areaSum =0.0;
         for(int i = 1; i < sample.size(); i++){
             // 将时间与数值间隔转化为double类型以便计算
             double a0, a1;
@@ -139,7 +136,11 @@ public class ErrorController {
             a0 = a0L.doubleValue();
             Long a1L = (long)sample.get(i).get("timestamp");
             a1 = a1L.doubleValue();
-
+            
+            double errorSum = 1.0;
+            double areaSum = 1.0;
+            double weightSum = 0.0;
+            
             for (String label : labels) {
             	double b0, b1;
                 Object value = sample.get(i-1).get(label);
@@ -153,8 +154,8 @@ public class ErrorController {
                 else if(value instanceof Integer) b1 = ((Integer) value).doubleValue();
                 else if(value instanceof Long) b1 = ((Long) value).doubleValue();
                 else b1 = (Double) value;
-			
-             // 找到每两个样本点之间对应的原始数据
+
+                // 找到每两个样本点之间对应的原始数据
                 for(newIndex = lastIndex; newIndex < data.size(); newIndex++){
                     if((long)data.get(newIndex).get("timestamp") > a1L) break;
                 }
@@ -162,7 +163,8 @@ public class ErrorController {
                 double error = 0.0;
                 double area = 0.0;
                 double weight = 0.0;
-             // 按原始数据点分段计算误差面积与原始数据面积
+
+                // 按原始数据点分段计算误差面积与原始数据面积
                 for(int j = lastIndex; j < newIndex; j++){
                     // 将时间与数值间隔转化为double类型以便计算
                     double x0, x1;
@@ -177,7 +179,7 @@ public class ErrorController {
                     else if(value instanceof Integer) y0 = ((Integer) value).doubleValue();
                     else if(value instanceof Long) y0 = ((Long) value).doubleValue();
                     else y0 = (Double) value;
-                    
+
                     value = data.get(j).get(label);
                     if(value instanceof Double) y1 = (Double) value;
                     else if(value instanceof Integer) y1 = ((Integer) value).doubleValue();
@@ -192,8 +194,8 @@ public class ErrorController {
                         // 除L0层级外，更高层级样本误差需累加已有层级样本的误差
                         error += (Double)data.get(j).get("error");
                     }
-                    
-                 // 新逻辑：高层级样本点的权重为低层级样本权重和
+
+                    // 新逻辑：高层级样本点的权重为低层级样本权重和
                     weight += (Double)data.get(j).get("weight");
 
                     // 线性插值
@@ -212,23 +214,21 @@ public class ErrorController {
                         error += Math.abs((x1 - x0) * (Math.abs(dy0) + Math.abs(dy1)) / 2);
                     }
                 }
-
-                lastIndex = newIndex;
-
-                // 重合数据点异常处理
-                if(Double.isNaN(error)) error = 0.0;
-                if(Double.isNaN(area)) area = 0.0;
-                
-                weightSum =weight;
-                errorSum +=error/labels.length;
-                areaSum +=area;
-
-            }
-                                                                    
+                if (label == labels[labels.length-1]) {
+                	lastIndex = newIndex;
+				}
+                errorSum *=error;
+                areaSum *=area;
+                weightSum =weight;                
+			}
+         // 重合数据点异常处理
+            if(Double.isNaN(errorSum)) errorSum = 0.0;
+            if(Double.isNaN(errorSum)) errorSum = 0.0;
 
             sample.get(i).put("error", errorSum);
             sample.get(i).put("area", areaSum);
             sample.get(i).put("weight", weightSum);
+            
         }
 		
 	}

@@ -16,7 +16,8 @@ public class M4Synthesize implements SamplingSynthesize {
 
         for(Bucket bucket : buckets){
             List<Map<String, Object>> datapoints = bucket.getDataPoints();
-            if(datapoints.size() <= 2*labels.length){
+//            System.out.println("每个桶："+datapoints.get(0));
+            if(datapoints.size() <= 2*(labels.length+1)){
                 res.addAll(datapoints);
                 continue;
             }

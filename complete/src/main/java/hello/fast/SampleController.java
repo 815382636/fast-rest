@@ -100,22 +100,44 @@ public class SampleController {
 		}
 		long freememery = Runtime.getRuntime().freeMemory();
 		long batchLimit = freememery / 10000L;
-//		if (batchLimit <100000) {
-//			batchLimit =100000;
-//		}else {
-//			batchLimit =200000;
+
+//		if (!sample.contains("aggregation")) {
+//			if (amount <= ((columns.size()+1)*2)) {
+//				amount =1;
+//			}else {
+//				amount = (int) Math.ceil(amount/((columns.size()+1)*2));
+//			}
 //		}
+		
+		if (dataPointCount < 100000) {
+			batchLimit =100000;
+		}else {
+			if (batchLimit < 100000) {
+				batchLimit = 100000;
+				amount = (int) Math.ceil(amount * batchLimit / dataPointCount);
+			}else {
+				if (batchLimit < dataPointCount) {
+					amount = (int) Math.ceil(amount * batchLimit / dataPointCount);
+				}
+			}
+		}
 		if (dbtype.equals("postgresql") || dbtype.equals("timescaledb"))
 			conditions =conditions + " order by time " ;
 		if (!conditions.contains("limit"))
 			conditions = conditions + " limit " + batchLimit;
 
-		amount = (int) (amount * batchLimit / dataPointCount);
+//		amount = (int) (amount * batchLimit / dataPointCount);
 		if (amount ==0) {
 			amount =1;
 		}
+//		除了aggregation采样，其他采样每个桶里采样(columns.size()+1)*2点，而aggregation采样采一个点
+		if (sample.contains("aggregation")) {
+			amount *=(columns.size()+1)*2;
+		}
 		System.out.println("amount:"+amount);
+		System.out.println("桶内采样算子："+sample);
 		if (!correlation) {
+			System.out.println("单独权重");
 			SamplingOperator samplingOperator;
 			// 桶内算子
 			if (sample.contains("aggregation"))
@@ -173,7 +195,8 @@ public class SampleController {
 						break;
 				}
 			}
-		} else {			
+		} else {		
+			System.out.println("联合权重");
 			SamplingSynthesize samplingsynthesize;
 			// 桶内算子
 			if (sample.contains("aggregation"))

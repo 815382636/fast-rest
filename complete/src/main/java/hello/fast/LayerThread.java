@@ -144,7 +144,7 @@ public class LayerThread extends Thread {
 
 		if (level == 0) {
 			String createDatabaseSql = String.format("create database %s;", pgDatabase);
-			System.out.println(createDatabaseSql);
+//			System.out.println(createDatabaseSql);
 			pgtool.queryUpdate(connection, createDatabaseSql);
 		}
 		// create database if not exist
@@ -175,30 +175,24 @@ public class LayerThread extends Thread {
 		String createHyperTableSql = "select create_hypertable('%s', 'time');";
 
 		pgtool.queryUpdate(connection, String.format(createTableSql, tableName));
-		System.out.println(String.format(createHyperTableSql, tableName));
+//		System.out.println(String.format(createHyperTableSql, tableName));
 		pgtool.queryUpdate(connection, String.format(createHyperTableSql, tableName));
 
 		if (correlation) {
-	        String weightLabel = dbtype.equals("iotdb") ? database + "." + timeseries + ".weight" : "weight";
-	        String timelabel = "time";
+			String timelabel = "time";
 			String[] iotdbCo = new String[co.length];
-			String[] allIotdbLabel = new String[co.length];
-			for (int i = 0; i < allIotdbLabel.length; i++) {
-				allIotdbLabel[i] = database + "." + timeseries + "." + co[i];
-			}
-			String[] allLabel = new String[co.length];
-			for (int i = 0; i < allLabel.length; i++) {
-				allLabel[i] = dbtype.equals("iotdb") ? allIotdbLabel[i]
-						: (dbtype.equals("influxdb") ? co[i] : co[i].toLowerCase());
-			}
 			for (int j = 0; j < iotdbCo.length; j++) {
 				iotdbCo[j] = database + "." + timeseries + "." + co[j];
 			}
-			String[] labels = dbtype.equals("iotdb") ? iotdbCo : co;
-			if (dbtype.equals("influxdb")) {
-				for (String string : labels) {
-					string.toLowerCase();
+	        String weightLabel = dbtype.equals("iotdb") ? database + "." + timeseries + ".weight" : "weight";
+			
+	        String[] labels = dbtype.equals("iotdb") ? iotdbCo : co;
+	        if (dbtype.equals("influxdb") || dbtype.equals("postgresql")) {
+				String[] nlabels =new String[labels.length];
+				for (int i = 0; i < nlabels.length; i++) {
+					nlabels[i] =labels[i].toLowerCase();
 				}
+				labels =nlabels;
 			}
 
 	        // 获取第一批数据，目标为计算BucketSum与时间数值的离群值阈值
@@ -240,22 +234,26 @@ public class LayerThread extends Thread {
 	        // first weights calc
 	        List<Double> weights = new ArrayList<>();
 	        if(level == 0) {
-	            WeightController.corralation_weights(dataPoints, timelabel, labels, dataPoints.size()/ratio, valueLimit);
-	            for(Map<String, Object> dataPoint : dataPoints) weights.add((Double)dataPoint.get("weight"));
+	        	WeightController.corralation_weights(dataPoints, timelabel, labels, dataPoints.size()/ratio, valueLimit);
+	            for(Map<String, Object> dataPoint : dataPoints) { 
+//	            	System.out.println(dataPoint);
+	            	weights.add((Double)dataPoint.get("weight"));
+	            	}
 	        }
 	        else{
 	            for(Map<String, Object> dataPoint : dataPoints){
+//	            	System.out.println(dataPoint);
 	                weights.add((double)dataPoint.get(weightLabel));
 	                dataPoint.put("weight", dataPoint.get(weightLabel));
 	            }
 	        }
 
-	        if(bucketSum == null) bucketSum = BucketsController.corralation_bucketSum(dataPoints, labels, dataPoints.size()/ratio);
+	        if(bucketSum == null) bucketSum =BucketsController.corralation_bucketSum(dataPoints, labels, dataPoints.size()/ratio);
 	        System.out.println("level " + level + " bucketSum:" + bucketSum);
 
 	        List<Bucket> buckets = BucketsController.corralation_buckets(dataPoints, timelabel, labels, dataPoints.size()/ratio, valueLimit);
-	        System.out.println(buckets.size());
-	     // 进行桶内采样
+
+	        // 进行桶内采样
 	        List<Map<String, Object>> sampleDataPoints = new ArrayList<>();
 	        sampleDataPoints = SampleController.correlation_samplePoints(buckets, timelabel, labels, sample);
 
@@ -263,29 +261,27 @@ public class LayerThread extends Thread {
 	        String deletesql = String.format("delete from %s where time>='%s'", tableName, latestTime);
 	        System.out.println(deletesql);
 	        pgtool.queryUpdate(connection, deletesql);
+
+	        // 写入新一批样本
 	        
-	     // 写入新一批样本
-//            String batchInsertFormat = "insert into %s (time, weight, error, area, %s) values ('%s', %s, %s, %s, %s);";
-			List<String> sqls;
+	        List<String> sqls;
 			StringBuilder sb;
 			String bigSql;
 			sampleDataPoints.sort(sampleComparator);
 			ErrorController.correlation_lineError(dataPoints, sampleDataPoints, labels, level == 0);
 			sqls = new ArrayList<>();
-
-//            String iotdbLabel = database + "." + timeseries + "." +co[il];
-//            String label = dbtype.equals("iotdb") ? iotdbLabel : (dbtype.equals("influxdb")? co[il] : co[il].toLowerCase());
 			String batchInsertFormat = "insert into %s (time, weight, error, area";
-			for (int i = 0; i < co.length; i++) {
-				batchInsertFormat += ", " + co[i];
+			for (int i = 0; i < columns.size(); i++) {
+				batchInsertFormat += ", " + columns.get(i);
 			}
 			batchInsertFormat += ") values (";
+			System.out.println("sampleDataPoints.size():"+sampleDataPoints.size());
 			for (Map<String, Object> map : sampleDataPoints) {
 				String newbatchInsertFormat = batchInsertFormat;
 				newbatchInsertFormat += "'" + map.get("time").toString() + "', " + map.get("weight") + ", "
 						+ map.get("error") + ", " + map.get("area");
-				for (int i = 0; i < allLabel.length; i++) {
-					newbatchInsertFormat += ", " + map.get(allLabel[i]);
+				for (int i = 0; i < labels.length; i++) {
+					newbatchInsertFormat += ", " + map.get(labels[i]);
 				}
 				newbatchInsertFormat += ");";
 				sqls.add(String.format(newbatchInsertFormat, tableName));
@@ -299,129 +295,137 @@ public class LayerThread extends Thread {
 			}
 			bigSql = sb.toString();
 			pgtool.queryUpdate(connection, bigSql);
-			
-			// 更新sampleQueue给下一层级
-			for (Map<String, Object> s : sampleDataPoints) {
-				for (int i = 0; i < allLabel.length; i++) {
-					s.put(co[i].toLowerCase(), s.get(allLabel[i]));
+	        	        	        	       
+	        // 更新sampleQueue给下一层级
+	        for(Map<String, Object> s : sampleDataPoints) {
+	        	for (int i = 0; i < labels.length; i++) {
+	        		s.put(columns.get(i).toLowerCase(), s.get(labels[i]));
 				}
-//            	s.put(columns.toLowerCase(), s.get(label));
-			}
-			sampleQueue.addAll(sampleDataPoints);
+	        }
+	        sampleQueue.addAll(sampleDataPoints);
 
-			latestTime = buckets.get(buckets.size() - 1).getDataPoints().get(0).get("time").toString().substring(0, 23);
+	        latestTime = buckets.get(buckets.size() - 1).getDataPoints().get(0).get("time").toString().substring(0,23);
 
-			// keep sampling data
-			while (!exit) {
-
-				long roundStartTime = System.currentTimeMillis();
-
-				if (level > 0) {
-					while (true) {
-						double queueWeight = 0.0;
-						dataPoints = new ArrayList<>(dataQueue);
-						for (Map<String, Object> p : dataPoints)
-							queueWeight += (Double) p.get("weight");
-
-						if (queueWeight >= bucketSum)
-							break;
-						else {
-							try {
-								Thread.sleep(100 * level);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-						}
-					}
-				} else {
-					// level = 0
-					if (dataPoints.size() < batchlimit) {
-						System.out.println("L0 catched up <<<<<<<<<<<<<<<!!!!!!!!!!!!!!");
-						try {
-							Thread.sleep(500);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-					}
+	        // keep sampling data
+	        while(!exit){
+	        	if (level ==1) {
+					System.out.println("线程存在");
 				}
+	            long roundStartTime = System.currentTimeMillis();
 
-				try {
-					if (level > 0) {
-						dataPoints = new ArrayList<>();
-						long k = Math.min(dataQueue.size(), batchlimit);
-						System.out.println("k = " + k);
-						for (int i = 0; i < k; i++) {
-							dataPoints.add(dataQueue.poll());
-						}
-					} else {
-						// level = 0
-						dataPoints = DataController._dataPoints(url, username, password, database, timeseries,
-								columnsStr, timecolumn, latestTime, null, String.format(" limit %s", batchlimit), null,
-								"map", null, null, dbtype);
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				dataPoints = new ArrayList<>(dataPoints);
+	            if (level > 0) {
+	                while (true){
+	                    double queueWeight = 0.0;
+	                    dataPoints = new ArrayList<>(dataQueue);
+	                    for(Map<String, Object> p : dataPoints) queueWeight += (Double)p.get("weight");
+	                    if(queueWeight >= bucketSum) break;
+	                    else {
+	                        try {
+	                            Thread.sleep(100 * level);
+	                        } catch (InterruptedException e) {
+	                            e.printStackTrace();
+	                        }
+	                    }
+	                }
+	            }
+	            else {
+	                // level = 0
+	                if(dataPoints.size() < batchlimit) {
+	                    System.out.println("L0 catched up <<<<<<<<<<<<<<<!!!!!!!!!!!!!!");
+	                    try {
+	                        Thread.sleep(500);
+	                    } catch (InterruptedException e) {
+	                        e.printStackTrace();
+	                    }
+	                }
+	            }
 
-				for (Map<String, Object> dataPoint : dataPoints)
-					dataPoint.put(timelabel, dataPoint.get(timelabel).toString().replace("T", " "));
+	            try {
+	                if(level > 0){
+	                    dataPoints = new ArrayList<>();
+	                    long k = Math.min(dataQueue.size(), batchlimit);
+	                    System.out.println("k = " + k);
+	                    for(int i = 0; i < k; i++){
+	                        dataPoints.add(dataQueue.poll());
+	                    }
+	                }
+	                else {
+	                    // level = 0
+	                    dataPoints = DataController._dataPoints(
+	                        url,
+	                        username,
+	                        password,
+	                        database,
+	                        timeseries,
+	                        columnsStr,
+	                        timecolumn,
+	                        latestTime,
+	                        null,
+	                        String.format(" limit %s", batchlimit),
+	                        null,
+	                        "map",
+	                        null,
+	                        null,
+	                        dbtype);
+	                }
+	            } catch (Exception e) {
+	                e.printStackTrace();
+	            }
+	            dataPoints = new ArrayList<>(dataPoints);
 
-				dataPoints.sort(sampleComparator);
+	            for(Map<String, Object> dataPoint : dataPoints) dataPoint.put(timelabel, dataPoint.get(timelabel).toString().replace("T", " "));
 
-				if (dataPoints == null || dataPoints.size() == 0) {
-					try {
-						Thread.sleep(500);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					continue;
-				}
+	            dataPoints.sort(sampleComparator);
 
-				// time format change for iotdb
-				if (dbtype.equals("iotdb"))
-					for (Map<String, Object> dataPoint : dataPoints)
-						dataPoint.put(timelabel, dataPoint.get(timelabel).toString().replace("T", " "));
+	            if(dataPoints == null || dataPoints.size() == 0){
+	                try {
+	                    Thread.sleep(500);
+	                } catch (InterruptedException e) {
+	                    e.printStackTrace();
+	                }
+	                continue;
+	            }
 
-				// weights calc
-				weights = new ArrayList<>();
-				if (level == 0) {
-					WeightController.corralation_weights(dataPoints, timelabel, labels, dataPoints.size() / ratio, valueLimit);
-					for (Map<String, Object> dataPoint : dataPoints)
-						weights.add((Double) dataPoint.get("weight"));
-				} else {
-					for (Map<String, Object> dataPoint : dataPoints) {
-						weights.add((double) dataPoint.get(weightLabel));
-						dataPoint.put("weight", dataPoint.get(weightLabel));
-					}
-				}
+	            // time format change for iotdb
+	            if(dbtype.equals("iotdb")) for(Map<String, Object> dataPoint : dataPoints) dataPoint.put(timelabel, dataPoint.get(timelabel).toString().replace("T", " "));
 
-				System.out.println(dataPoints.size());
-				System.out.println(weights.size());
+	            // weights calc
+	            weights = new ArrayList<>();
+	            if(level == 0) {
+	                WeightController.corralation_weights(dataPoints, timelabel, labels, dataPoints.size()/ratio, valueLimit);
+	                for(Map<String, Object> dataPoint : dataPoints) weights.add((Double)dataPoint.get("weight"));
+	            }
+	            else{
+	                for(Map<String, Object> dataPoint : dataPoints){
+	                    weights.add((double)dataPoint.get(weightLabel));
+	                    dataPoint.put("weight", dataPoint.get(weightLabel));
+	                }
+	            }
 
-				if (bucketSum == null)
-					bucketSum = BucketsController.corralation_bucketSum(dataPoints, labels, dataPoints.size() / ratio);
-				System.out.println("level " + level + " bucketSum:" + bucketSum);
-				buckets = BucketsController.corralation_buckets(dataPoints, timelabel, labels, dataPoints.size() / ratio, valueLimit);
-				System.out.println(buckets.size());
+	            if(bucketSum == null) bucketSum = BucketsController.corralation_bucketSum(dataPoints, labels, dataPoints.size()/ratio);
+	            System.out.println("level " + level + " bucketSum:" + bucketSum);
 
-				// 进行桶内采样
-				sampleDataPoints = SampleController.correlation_samplePoints(buckets, timelabel, labels, sample);
-				// 删除上次的最后一桶
-				deletesql = String.format("delete from %s where time>='%s'", tableName, latestTime);
-				System.out.println(deletesql);
-				pgtool.queryUpdate(connection, deletesql);
+	            buckets = BucketsController.corralation_buckets(dataPoints, timelabel, labels, dataPoints.size()/ratio, valueLimit);
 
-				// 写入新一批样本
-				sampleDataPoints.sort(sampleComparator);
-				ErrorController.correlation_lineError(dataPoints, sampleDataPoints, labels, level == 0);
-				sqls = new ArrayList<>();
-				for (Map<String, Object> map : sampleDataPoints) {
+	            // 进行桶内采样
+	            sampleDataPoints = SampleController.correlation_samplePoints(buckets, timelabel, labels, sample);
+
+	            // 删除上次的最后一桶
+	            deletesql = String.format("delete from %s where time>='%s'", tableName, latestTime);
+	            System.out.println(deletesql);
+	            pgtool.queryUpdate(connection, deletesql);
+
+	            // 写入新一批样本
+	            sampleDataPoints.sort(sampleComparator);	      
+	            ErrorController.correlation_lineError(dataPoints, sampleDataPoints, labels, level == 0);
+	            sqls = new ArrayList<>();
+	            
+	            for (Map<String, Object> map : sampleDataPoints) {
 					String newbatchInsertFormat = batchInsertFormat;
 					newbatchInsertFormat += "'" + map.get("time").toString() + "', " + map.get("weight") + ", "
 							+ map.get("error") + ", " + map.get("area");
-					for (int i = 0; i < allLabel.length; i++) {
-						newbatchInsertFormat += ", " + map.get(allLabel[i]);
+					for (int i = 0; i < labels.length; i++) {
+						newbatchInsertFormat += ", " + map.get(labels[i]);
 					}
 					newbatchInsertFormat += ");";
 					sqls.add(String.format(newbatchInsertFormat, tableName));
@@ -434,64 +438,73 @@ public class LayerThread extends Thread {
 						sb.append(sql);
 				}
 				bigSql = sb.toString();
-				pgtool.queryUpdate(connection, bigSql);
+				pgtool.queryUpdate(connection, bigSql);	            
 
-				// 更新sampleQueue给下一层级
-				for (Map<String, Object> s : sampleDataPoints) {
-					for (int i = 0; i < allLabel.length; i++) {
-						s.put(co[i].toLowerCase(), s.get(allLabel[i]));
+	            // 更新sampleQueue给下一层级
+				for(Map<String, Object> s : sampleDataPoints) {
+		        	for (int i = 0; i < labels.length; i++) {
+		        		s.put(columns.get(i).toLowerCase(), s.get(labels[i]));
 					}
-//                	s.put(columns.toLowerCase(), s.get(label));
-				}
-				sampleQueue.addAll(sampleDataPoints);
+		        }
+	            sampleQueue.addAll(sampleDataPoints);
 
-				// 统计throughput
-				throughput += dataPoints.size();
-				long usedtime = System.currentTimeMillis() - setuptime;
-				long roundtime = System.currentTimeMillis() - roundStartTime + 1L;
-				System.out.println(String.format("throughput:%d, used time: %d, average:%d", throughput, usedtime,
-						dataPoints.size() * 1000 / roundtime));
 
-				// 根据throughput触发下一层级
-				if (!hadKickOff && throughput > kickOffThreshold) {
-					hadKickOff = true;
-					String Identifier = String.format("%s,%s,%s,%s,%s", url, database, tableName, columnsStr, salt);
-					String newSubId = DigestUtils.md5DigestAsHex(Identifier.getBytes()).substring(0, 8);
-					System.out.println("kick off the level " + (level + 1) + "<<<<<<!!!!!!!");
-					LayerThread pgsubscribeThread = new LayerThread(url, username, password, database, tableName,
-							columns, timecolumn, starttime, endtime, TYPE, ratio, newSubId, level + 1, sample,
-							"postgresql", valueLimit, batchlimit, sampleQueue, bucketSum * ratio / 2, correlation);
-					pgsubscribeThread.start();
-				}
+	            // 统计throughput
+	            throughput += dataPoints.size();
+	            long usedtime = System.currentTimeMillis() - setuptime;
+	            long roundtime = System.currentTimeMillis() - roundStartTime + 1L;
+	            System.out.println(String.format("throughput:%d, used time: %d, average:%d", throughput, usedtime, dataPoints.size() * 1000 / roundtime));
 
-				if (exit) {
-					try {
-						connection.close();
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
-				}
+	            // 根据throughput触发下一层级
+	            System.out.println("---------------");
+	            System.out.println("level"+level);
+	            System.out.println("hadKickOff"+hadKickOff);
+	            System.out.println("throughput"+throughput);
+	            System.out.println("kickOffThreshold"+kickOffThreshold);
+	            System.out.println("------------------");
+	            if(!hadKickOff && throughput > kickOffThreshold){
+	                hadKickOff = true;
+	                String Identifier = String.format("%s,%s,%s,%s,%s", url, database, tableName, columns, salt);
+	                String newSubId = DigestUtils.md5DigestAsHex(Identifier.getBytes()).substring(0,8);
+	                System.out.println("kick off the level " + (level +1) + "<<<<<<!!!!!!!");
+	                LayerThread pgsubscribeThread = new LayerThread(url, username, password, database, tableName, columns, timecolumn, starttime, endtime, TYPE, ratio, newSubId, level+1, sample, "postgresql",valueLimit, batchlimit, sampleQueue, bucketSum * ratio / 2,correlation);
+	                pgsubscribeThread.start();
+	            }
 
-				// 单独处理最新桶，获得latestTime
-				List<Map<String, Object>> newcomingData = buckets.get(buckets.size() - 1).getDataPoints();
-				latestTime = newcomingData.get(0).get("time").toString().substring(0, 23);
+	            if(exit) {
+	                try {
+	                    connection.close();
+	                } catch (SQLException e) {
+	                    e.printStackTrace();
+	                }
+	            }
 
-				// 采样终止条件：latestTime大于截止日期
-				if (endtime != null && latestTime.compareTo(endtime) >= 0) {
-					exit = true;
-					System.out.println("L" + level + " catched up <<<<<<<<<<<<<<<!!!!!!!!!!!!!!");
-				}
+	            // 单独处理最新桶，获得latestTime
+	            List<Map<String, Object>> newcomingData = buckets.get(buckets.size() - 1).getDataPoints();
+	            latestTime = newcomingData.get(0).get("time").toString().substring(0,23);
 
-				System.out.println("buckets.size():" + buckets.size());
-				System.out.println(String.format("L%d data size: %s, sample size: %s, ratio: %s", level,
-						dataPoints.size(), sampleDataPoints.size(), dataPoints.size() / sampleDataPoints.size()));
+	            // 采样终止条件：latestTime大于截止日期
+	            if(endtime != null && latestTime.compareTo(endtime) >= 0){
+	                exit = true;
+	                System.out.println("L" + level + " catched up <<<<<<<<<<<<<<<!!!!!!!!!!!!!!");
+	            }
 
-			}
+	            System.out.println("buckets.size():" + buckets.size());
+	            System.out.println(String.format("L%d data size: %s, sample size: %s, ratio: %s", level, dataPoints.size(), sampleDataPoints.size(), dataPoints.size() / sampleDataPoints.size()));
+
+	            // 生命在于留白
+	            try {
+	                long interval = 300L;
+	                Thread.sleep(interval);
+	            } catch (InterruptedException e) {
+	                e.printStackTrace();
+	            }
+	        }
 	        
 
 		}else {
+			List<Map<String, Object>> dataPointSum =new ArrayList<>();
 			for (int il = 0; il < co.length; il++) {
-
 				// different value column name for different database
 				String iotdbLabel = database + "." + timeseries + "." + co[il];
 				String weightLabel = dbtype.equals("iotdb") ? database + "." + timeseries + ".weight" : "weight";
@@ -499,7 +512,7 @@ public class LayerThread extends Thread {
 				for (int i = 0; i < allIotdbLabel.length; i++) {
 					allIotdbLabel[i] = database + "." + timeseries + "." + co[i];
 				}
-				System.out.println(weightLabel);
+				System.out.println("weightLabel:"+weightLabel);
 
 				String label = dbtype.equals("iotdb") ? iotdbLabel
 						: (dbtype.equals("influxdb") ? co[il] : co[il].toLowerCase());
@@ -509,7 +522,7 @@ public class LayerThread extends Thread {
 							: (dbtype.equals("influxdb") ? co[i] : co[i].toLowerCase());
 				}
 				String timelabel = "time";
-				System.out.println(allLabel.length);
+				System.out.println("allLabel.length:"+allLabel.length);
 
 				// 获取第一批数据，目标为计算BucketSum与时间数值的离群值阈值
 				List<Map<String, Object>> dataPoints = null;
@@ -529,7 +542,7 @@ public class LayerThread extends Thread {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-
+				System.out.println("dataPoints.size:"+dataPoints.size());
 				// time format change for iotdb
 				if (dbtype.equals("iotdb"))
 					for (Map<String, Object> dataPoint : dataPoints)
@@ -550,8 +563,7 @@ public class LayerThread extends Thread {
 					}
 				}
 
-				System.out.println(dataPoints.size());
-				System.out.println(weights.size());
+				System.out.println("weights.size():"+weights.size());
 
 				if (bucketSum == null)
 					bucketSum = BucketsController._bucketSum(dataPoints, timelabel, label, dataPoints.size() / ratio,
@@ -562,7 +574,7 @@ public class LayerThread extends Thread {
 				List<Bucket> buckets = BucketsController._buckets(dataPoints, timelabel, label, dataPoints.size() / ratio,
 						valueLimit == null ? null : valueLimit.get("time"),
 						valueLimit == null ? null : valueLimit.get(co[il]));
-				System.out.println(buckets.size());
+				System.out.println("buckets.size():"+buckets.size());
 
 				// 进行桶内采样
 				List<Map<String, Object>> sampleDataPoints = new ArrayList<>();
