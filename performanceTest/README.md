@@ -18,9 +18,9 @@
 
 ## 测试过程
 
-    本次实验主要是通过以上的几种评价指标对两种不同的权重计算方式（1.分别计算权重2.计算联合权重）所得到的采样结果进行相似度评价，并比较各自的优缺点。
-    实验主要包括两种权重计算方式针对于一个变量和两个变量的比较，每一个权重计算方式又包括四种桶内采样方法（m4,aggregation,sample,outlier）,对使用相同桶内采样方法的不同权重计算方式进行相似度的比较。
-    实验用的是"2019-08-16 00:00:00"-"2019-08-18 00:00:00"的"jdbc:iotdb://101.6.15.201:6667/root.group_9"中的数据，数据规模172937条，采样数目是500条。
+-   本次实验主要是通过以上的几种评价指标来对比自适应分桶与平均分桶、桶内的5种采样算子（sample,M4,aggregation,outler,weight）、两种权重计算方式（计算联合权重和单独权重）所产生的采样结果与原数据的相似度。
+-   本次实验使用5种数据（subway、kpi、bus、particle、intel）,使用控制变量法，变量为数据类型（5种数据）、采样数量（500、750、1000、1500、2000）、分桶方式（自适应分桶、平均分桶）、权重计算方式（联合权重、单独权重）、桶内采样算子（sample,M4,aggregation,outler,weight）
+
 
 ## 测试环境
 
@@ -38,41 +38,93 @@
 -   其他版本下载地址：http://chromedriver.storage.googleapis.com/index.html
 -   下载与本地chrome同版本的chromedriver覆盖在本目录中
 
-## 运行设置
+## 采样实验
 
-### 运行文件
+### 平均分桶与自适应分桶相似度对比
 
--   interfaceTest中 是对比测试单独权重和综合权重单变量MSSSIM、PAE、PMSE指标的测试脚本
--   interfaceTest1中 是对比测试单独权重和综合权重两个变量MSSSIM、PAE、PMSE指标的测试脚本
--   运行apprun.py 即可运行测试脚本
--   restAPI数据可以通过文件夹中的univariateURL、bivariateURL文件进行修改
--   脚本生成的折线图、面积图会存在在xxx_png中。MSSSIM、PAE、PMSE会存在目录的txt文件中
+#### 实验内容
 
-### 运行
+-   使用控制变量法，保持其余变量相同，比较平均分桶与自适应分桶采样相似度差异。
 
--   cd interfaceTest 或 cd interfaceTest1
--   python apprun.py 
+#### 实验过程
 
-##  自适应分桶方法性能测试
+-   对比实验在bucketTest包中，startURL.txt是访问REST API的参数文件，可以对参数进行修改。
+-   运行apprun.py可以生成MSSSIM,PAE,PMSE结果，在对应的文本文档里。
+-   运行apprun_color.py可以画出有区分性的图表。
 
-- 此次测试主要通过对比自适应分桶和平均分桶使用不同的桶内采样方法（M4,aggregation，random，outlier，weight）所花费的时间来测试自适应分桶算法的性能
+#### 运行
 
-### 数据写入
+-   cd interfaceTest 
+-   python apprun.py
+-   python apprun_color.py
 
+### 桶内算子采样相似度对比
+
+#### 实验内容
+
+-   使用控制变量法，保持其余变量相同，比较桶内算子M4、aggregation、outlier、sample、weight采样相似度差异。
+
+#### 实验过程
+
+-   对比实验在BucketSampleTest包中，subway.txt、intel.txt、kpi.txt、particle.txt、bus.txt是访问REST API的参数文件，可以对参数进行修改。
+-   运行subwayrun.py、intelrun.py、kpirun.py、particlerun.py、busrun.py可以生成MSSSIM,PAE,PMSE结果，在1.txt~12.txt对应的文本文档里。
+-   plt.py可以画出有MSSSIM,PAE,PMSE指标的综合性图表。
+
+#### 运行
+
+-   cd BucketSampleTest 
+-   python subwayrun.py
+-   python intelrun.py
+-   python kpirun.py
+-   python particlerun.py
+-   python busrun.py
+-   python plt.py
+
+### 权重计算方式采样相似度对比
+
+#### 实验内容
+
+-   使用控制变量法，保持其余变量相同，比较权重计算方式（联合权重、单独权重）采样相似度差异。
+
+#### 实验过程
+
+-   对比实验在interfaceTest1包中，subway.txt、intel.txt、kpi.txt、particle.txt、bus.txt是访问REST API的参数文件，可以对参数进行修改。
+-   运行m4run.py、aggregationrun.py、outlierrun.py、weightrun.py、samplerun.py可以生成MSSSIM,PAE,PMSE结果，在1.txt~12.txt对应的文本文档里。
+-   plt.py可以画出有MSSSIM,PAE,PMSE指标的综合性图表。
+
+#### 运行
+
+-   cd interfaceTest1 
+-   python m4run.py
+-   python aggregationrun.py
+-   python outlierrun.py
+-   python weightrun.py
+-   python samplerun.py
+-   python plt.py
+
+
+### 桶内算子性能测试
+
+- 此次测试主要通过对比自适应分桶和平均分桶使用不同的桶内采样方法（M4,aggregation，random，outlier，weight）所花费的时间来测试桶内算子的性能
+
+#### 数据写入
 - 数据写入使用的java脚本，该文件在项目代码的util包下，即./complete/src/main/java/hello/fast/util/SamplePerformanceTest.java。
 - 将SamplePerformanceTest.java文件中的innerURL、innerUserName、innerPassword修改为要写入的postgreSQL数据库地址，即可自动化写入。
 - 数据写入会建4张表，表中分别存10W,100W,1000W，1亿条数据，数据内容为两列：1列时间数据，一列随机生成的20以内自然数，若有需求可另行添加。
 
-### 中间层运行
+#### 中间层运行
 
 - sampleTest文件夹下gs-rest-service-0.1.0.jar包对中间层略作修改，返回的不是经过采样的数据，是自适应分桶或平均分桶过程所花费的时间
 - 通过fast.config可以对中间层参数进行修改。
 - 中间层运行：java -jar gs-rest-service-0.1.0.jar
 
-### 测试脚本运行
+#### 测试脚本运行
 
 - 测试的环境可以使用以上接口测试所建立的虚拟环境
 - restAPI数据可以通过sampletest.txt文件进行修改
 - 测试脚本运行：python performance_test_sample.py
 - 测试结果会在sampleresult.txt中生成
+
+
+
 
