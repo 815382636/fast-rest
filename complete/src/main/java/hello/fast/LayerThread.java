@@ -236,13 +236,11 @@ public class LayerThread extends Thread {
 	        if(level == 0) {
 	        	WeightController.corralation_weights(dataPoints, timelabel, labels, dataPoints.size()/ratio, valueLimit);
 	            for(Map<String, Object> dataPoint : dataPoints) { 
-//	            	System.out.println(dataPoint);
 	            	weights.add((Double)dataPoint.get("weight"));
 	            	}
 	        }
 	        else{
 	            for(Map<String, Object> dataPoint : dataPoints){
-//	            	System.out.println(dataPoint);
 	                weights.add((double)dataPoint.get(weightLabel));
 	                dataPoint.put("weight", dataPoint.get(weightLabel));
 	            }
@@ -308,9 +306,6 @@ public class LayerThread extends Thread {
 
 	        // keep sampling data
 	        while(!exit){
-	        	if (level ==1) {
-					System.out.println("线程存在");
-				}
 	            long roundStartTime = System.currentTimeMillis();
 
 	            if (level > 0) {
@@ -456,15 +451,9 @@ public class LayerThread extends Thread {
 	            System.out.println(String.format("throughput:%d, used time: %d, average:%d", throughput, usedtime, dataPoints.size() * 1000 / roundtime));
 
 	            // 根据throughput触发下一层级
-	            System.out.println("---------------");
-	            System.out.println("level"+level);
-	            System.out.println("hadKickOff"+hadKickOff);
-	            System.out.println("throughput"+throughput);
-	            System.out.println("kickOffThreshold"+kickOffThreshold);
-	            System.out.println("------------------");
 	            if(!hadKickOff && throughput > kickOffThreshold){
 	                hadKickOff = true;
-	                String Identifier = String.format("%s,%s,%s,%s,%s", url, database, tableName, columns, salt);
+	                String Identifier = String.format("%s,%s,%s,%s,%s", url, database, tableName, columnsStr, salt);
 	                String newSubId = DigestUtils.md5DigestAsHex(Identifier.getBytes()).substring(0,8);
 	                System.out.println("kick off the level " + (level +1) + "<<<<<<!!!!!!!");
 	                LayerThread pgsubscribeThread = new LayerThread(url, username, password, database, tableName, columns, timecolumn, starttime, endtime, TYPE, ratio, newSubId, level+1, sample, "postgresql",valueLimit, batchlimit, sampleQueue, bucketSum * ratio / 2,correlation);

@@ -284,6 +284,7 @@ public class QueryController {
                 String newSubId = DigestUtils.md5DigestAsHex(Identifier.getBytes()).substring(0,8);
                 tableName = "L" + i + "_M" + newSubId;
                 res[n-1-i] = tableName;
+                System.out.println(tableName);
             }
             return res;
         } catch (Exception e){
