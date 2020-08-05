@@ -36,6 +36,11 @@ public class AggregationSynthesize implements SamplingSynthesize {
 				obj.put(labels[j], valueSum / datapoints.size());
 			}
 			obj.put(timelabel, datapoints.get(datapoints.size() - 1).get(timelabel));
+//			for (String k : datapoints.get(datapoints.size() - 1).keySet()) {
+//				if (k.equals("timestamp")) {
+//					obj.put("timestamp", datapoints.get(datapoints.size() - 1).get("timestamp"));
+//				}
+//			}
 			res.add(obj);
 			
 		}

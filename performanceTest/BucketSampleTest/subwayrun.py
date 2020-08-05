@@ -18,16 +18,16 @@ GREEN = 120
 BLUE = 168
 ALPHA = 255
 
-line_dir = "line_png"
-area_dir = "area_png"
-pixel_dir = "pixel_png"
+line_dir = "subwayline_png"
+area_dir = "subwayarea_png"
+pixel_dir = "subwaypixel_png"
 line_postfix = "-line.png"
 area_postfix = "-area.png"
 pixel_postfix = "-pixel.png"
 
 
 start_step =0
-param_file ="subway.txt"
+param_file ="subway-m4.txt"
 start_time = "2019-08-16 00:00:00"
 end_time = "2019-08-18 00:00:00"
 min_value, max_value =1900,3000
@@ -203,7 +203,7 @@ if start_step <= 4:
     os.system("rm -R %s" % pixel_dir)
     os.system("mkdir -p %s" % pixel_dir)
     print("# 4.提取折线图像素计算PAE...")
-    pae_result = open("5.txt", "a")
+    pae_result = open("6.txt", "a")
     # pae_result.write("%f,%f\n" % (percent, alpha))
     # pae_result.write("sample,pae\n")
     line_charts = os.listdir(line_dir)
@@ -257,7 +257,7 @@ time_5 = time.time()
 # 5.折线图提取上沿计算均方误差
 if start_step <= 6:
     print("# 6.折线图提取上沿计算均方误差...")
-    mse_result = open("9.txt", "a")
+    mse_result = open("11.txt", "a")
     # mse_result.write("%f,%f\n" % (percent, alpha))
     # mse_result.write("sample,pmse\n")
     pixel_data_0 = line2pixel(line_dir + "/" + base_line_png)

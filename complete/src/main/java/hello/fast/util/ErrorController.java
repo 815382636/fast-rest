@@ -137,8 +137,8 @@ public class ErrorController {
             Long a1L = (long)sample.get(i).get("timestamp");
             a1 = a1L.doubleValue();
             
-            double errorSum = 1.0;
-            double areaSum = 1.0;
+            double errorSum = 0.0;
+            double areaSum = 0.0;
             double weightSum = 0.0;
             
             for (String label : labels) {
@@ -217,11 +217,13 @@ public class ErrorController {
                 if (label == labels[labels.length-1]) {
                 	lastIndex = newIndex;
 				}
-                errorSum *=error;
-                areaSum *=area;
+                errorSum +=error;
+                areaSum +=area;
                 weightSum =weight;                
 			}
          // 重合数据点异常处理
+            errorSum /=labels.length;
+            areaSum /=labels.length;
             if(Double.isNaN(errorSum)) errorSum = 0.0;
             if(Double.isNaN(errorSum)) errorSum = 0.0;
 

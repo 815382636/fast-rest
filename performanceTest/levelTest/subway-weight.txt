@@ -1,0 +1,15 @@
+subway-data
+http://127.0.0.1:9091/data
+{"url":"jdbc:iotdb://101.6.15.201:6667/","username":"root","password":"root","database":"root.group_9","timeseries":"1701","columns":["ZT31","ZT32"],"endTime":"2019-08-18 00:00:00","startTime":"2019-08-16 00:00:00","conditions":" and ZT31 > 0 and ZT32 >0","dbtype":"iotdb","returnType":"division"}
+subway-2000-weight
+http://127.0.0.1:9091/query
+{"url":"jdbc:iotdb://101.6.15.201:6667/","database":"root.group_9","timeseries":"1701","columns":["ZT31","ZT32"],"startTime":"2019-08-16 00:00:00","endTime":"2019-08-18 00:00:00","amount":2000,"returnType":"division"}
+subway-4000-weight
+http://127.0.0.1:9091/query
+{"url":"jdbc:iotdb://101.6.15.201:6667/","database":"root.group_9","timeseries":"1701","columns":["ZT31","ZT32"],"startTime":"2019-08-16 00:00:00","endTime":"2019-08-18 00:00:00","amount":4000,"returnType":"division"}
+subway-8000-weight
+http://127.0.0.1:9091/query
+{"url":"jdbc:iotdb://101.6.15.201:6667/","database":"root.group_9","timeseries":"1701","columns":["ZT31","ZT32"],"startTime":"2019-08-16 00:00:00","endTime":"2019-08-18 00:00:00","amount":8000,"returnType":"division"}
+subway-12000-weight
+http://127.0.0.1:9091/query
+{"url":"jdbc:iotdb://101.6.15.201:6667/","database":"root.group_9","timeseries":"1701","columns":["ZT31","ZT32"],"startTime":"2019-08-16 00:00:00","endTime":"2019-08-18 00:00:00","amount":12000,"returnType":"division"}

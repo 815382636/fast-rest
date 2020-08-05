@@ -1,0 +1,17 @@
+subway-8000-m4-area.png,0.99959135
+subway-data-area.png,1.0
+subway-4000-m4-area.png,0.99900055
+subway-2000-m4-area.png,0.99794173
+subway-12000-m4-area.png,0.9998515
+subway-8000-sample-area.png,0.9998019
+subway-2000-sample-area.png,0.9986543
+subway-4000-sample-area.png,0.99944556
+subway-12000-sample-area.png,0.9999175
+subway-4000-outlier-area.png,0.9989241
+subway-2000-outlier-area.png,0.9976187
+subway-8000-outlier-area.png,0.99934804
+subway-12000-outlier-area.png,0.99978274
+subway-4000-weight-area.png,0.9988864
+subway-2000-weight-area.png,0.9971289
+subway-8000-weight-area.png,0.999321
+subway-12000-weight-area.png,0.99962956

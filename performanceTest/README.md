@@ -102,6 +102,26 @@
 -   python samplerun.py
 -   python plt.py
 
+### 层级结构采样相似度对比
+
+#### 实验内容
+
+-   控制采样数目为2000，4000，8000，12000，对比层级结构采样相似度差异。
+
+#### 实验过程
+
+-   对比实验在levelTest包中，subway-m4.txt、subway-outlier.txt、subway-sample.txt、subway-weight.txt是访问REST API的参数文件，可以对参数进行修改。
+-   修改subwayRun.py中param_file参数为对应的txt文件
+-   运行subwayRun.py可以生成MSSSIM,PAE,PMSE结果。
+-   将变量一、变量二分开复制到1~6.txt文件中
+-   plt.py可以画出有MSSSIM,PAE,PMSE指标的综合性图表。
+
+#### 运行
+
+-   cd levelTest 
+-   python subwayRun.py
+-   python plt.py
+
 
 ### 桶内算子性能测试
 

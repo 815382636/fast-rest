@@ -288,6 +288,10 @@ public class LayerThread extends Thread {
 			for (String sql : sqls) {
 				if (sql.toLowerCase().contains("nan"))
 					System.out.println(sql);
+				else if (sql.toLowerCase().contains("infinity")) {
+					System.out.println("-------------");
+					System.out.println(sql);
+				}
 				else
 					sb.append(sql);
 			}

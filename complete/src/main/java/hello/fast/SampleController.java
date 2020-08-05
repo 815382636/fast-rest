@@ -36,7 +36,7 @@ public class SampleController {
 			@RequestParam(value = "port", required = false) String port,
 			@RequestParam(value = "amount", defaultValue = "2000") Integer amount,
 			@RequestParam(value = "dbtype", defaultValue = "iotdb") String dbtype,
-			@RequestParam(value = "sample", defaultValue = "weight") String sample,
+			@RequestParam(value = "sample", defaultValue = "m4") String sample,
 			@RequestParam(value = "returnType", defaultValue = "Integration") String returnType,
 			@RequestParam(value = "bucketMethod", defaultValue = "adaption") String bucketMethod,
 			@RequestParam(value = "correlation", defaultValue = "True") Boolean correlation,
@@ -100,14 +100,6 @@ public class SampleController {
 		}
 		long freememery = Runtime.getRuntime().freeMemory();
 		long batchLimit = freememery / 10000L;
-
-//		if (!sample.contains("aggregation")) {
-//			if (amount <= ((columns.size()+1)*2)) {
-//				amount =1;
-//			}else {
-//				amount = (int) Math.ceil(amount/((columns.size()+1)*2));
-//			}
-//		}
 		
 		if (dataPointCount < 100000) {
 			batchLimit =100000;
@@ -126,7 +118,6 @@ public class SampleController {
 		if (!conditions.contains("limit"))
 			conditions = conditions + " limit " + batchLimit;
 
-//		amount = (int) (amount * batchLimit / dataPointCount);
 		if (amount ==0) {
 			amount =1;
 		}
@@ -218,6 +209,7 @@ public class SampleController {
 				if (buckets == null)
 					break;
 				// 最新数据点时间没有改变，数据已经消费完成
+				System.out.println("buckets.size:"+buckets.size());
 				List<Map<String, Object>> lastBucket = buckets.get(buckets.size() - 1).getDataPoints();
 
 				String newestTime;

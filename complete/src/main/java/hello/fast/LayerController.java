@@ -33,7 +33,7 @@ public class LayerController {
             @RequestParam(value="timeColumn", defaultValue = "time") String timecolumn,
             @RequestParam(value="startTime", defaultValue = "1971-01-01 00:00:00") String starttime,
             @RequestParam(value="endTime", required = false) String endtime,
-            @RequestParam(value="sample", defaultValue = "weight") String sample,
+            @RequestParam(value="sample", defaultValue = "m4") String sample,
 			@RequestParam(value = "correlation", defaultValue = "True") Boolean correlation,
 			@RequestParam(value = "valueLimit", required = false) Map<String, Double> valueLimit,
             @RequestParam(value="ratio", defaultValue = "10") Integer ratio,

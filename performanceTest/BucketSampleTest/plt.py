@@ -27,11 +27,11 @@ outlier =[1,2,3,4,5]
 
 plt.figure(figsize=(28, 15))
 
-for i in range(1, 13):
+for i in range(1, 16):
     data = open("%d.txt" % i).read()
     lines = data.split("\n")
     for line in lines:
-        print(line.split(","))
+        # print(line.split(","))
         index = 0
         if "500" in line:
             index = 0
@@ -45,6 +45,8 @@ for i in range(1, 13):
             index = 4
         if "m4" in line:
             m4[index] = float(line.split(",")[1])
+            if i ==3:
+                print(m4[index])
         if "sample" in line:
             sample[index] = float(line.split(",")[1])
         if "weight" in line:
@@ -54,12 +56,15 @@ for i in range(1, 13):
         if "outlier" in line:
             outlier[index] = float(line.split(",")[1])
 
-    ax = plt.subplot(3, 4, i)
-    plt.plot(account, m4, "o-", color='#ED5564', label="m4")
-    plt.plot(account, sample, "v-", color='#AC92EB', label="sample")
-    plt.plot(account, aggregation, "o--", color='#FFCE54', label="aggregation")
-    plt.plot(account, outlier, "v--", color='#D20338', label="outlier")
-    plt.plot(account, weight, "o-.", color='#A0D568', label="weight")
+    ax = plt.subplot(3, 5, i)
+
+
+    plt.plot(account, sample, "o-", color='#AC92EB', label="sample")
+    plt.plot(account, aggregation, "o-", color='#FFCE54', label="aggregation")
+    plt.plot(account, outlier, "o-", color='#0870CB', label="outlier")
+    plt.plot(account, weight, "o-", color='#A0D568', label="weight")
+    plt.plot(account, m4, "o-", color='#D20338', label="m4")
+
     # plt.plot(account, sample, "v-.", color='#A0D568', label="sample")
     # plt.plot(account, grad, "o:", color='#AC92EB', label="FAST-outlier")
     plt.grid()

@@ -18,16 +18,16 @@ GREEN = 120
 BLUE = 168
 ALPHA = 255
 
-line_dir = "line_png"
-area_dir = "area_png"
-pixel_dir = "pixel_png"
+line_dir = "subwayline_png"
+area_dir = "subwayarea_png"
+pixel_dir = "subwaypixel_png"
 line_postfix = "-line.png"
 area_postfix = "-area.png"
 pixel_postfix = "-pixel.png"
 
 
 start_step =0
-param_file ="subway.txt"
+param_file ="subway-m4.txt"
 start_time = "2019-08-16 00:00:00"
 end_time = "2019-08-18 00:00:00"
 min_value, max_value =1900,3000

@@ -37,8 +37,8 @@ public class QueryController {
             @RequestParam(value="timeseries") String timeseries,
             @RequestParam(value="columns") List<String> columns,
             @RequestParam(value="timecolumn", defaultValue = "time") String timecolumn,
-            @RequestParam(value="starttime", required = false) String starttime,
-            @RequestParam(value="endtime", required = false) String endtime,
+            @RequestParam(value="startTime", required = false) String starttime,
+            @RequestParam(value="endTime", required = false) String endtime,
             @RequestParam(value="amount", defaultValue = "2000") Long amount,
             @RequestParam(value="ip", required = false) String ip,
             @RequestParam(value="port", required = false) String port,
@@ -102,7 +102,8 @@ public class QueryController {
 				columnsStr +=",";
 			}
 		}
-        
+
+
         // iotdb is . tsdb is _
         String[] tables = subTables(url, innerUrl, innerUserName, innerPassword, database, timeseries, columnsStr);
         // 是否已经找到对应层级
@@ -232,7 +233,7 @@ public class QueryController {
         // iotdb is . tsdb is _
         String[] tables = subTables(url, innerUrl, innerUserName, innerPassword, database, timeseries, columnsStr);
         boolean hit = false;
-
+        System.out.println("errorPercent:"+errorPercent);
         List<Map<String, Object>> res = null;
         for(String tableName : tables){
             System.out.println(tableName);
@@ -254,7 +255,7 @@ public class QueryController {
                 area += (double)res.get(i).get("area");
             }
 
-            System.out.println(error / area);
+            System.out.println("error / area:"+error / area);
             if((error / area) <= errorPercent) {
                 hit = true;
             }
