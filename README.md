@@ -139,7 +139,6 @@
 | port | Jdbc端口，如非空将覆盖jdbcurl | String | 否 |  |
 | format | 数据返回形式 | String | 否 | - |
 | dbtype | 数据库类型,支持iotdb， | influxdb,postgresql(timescaledb)与kafka等 | String | 否 | - |
-| correlation | 是否使用联合权重，默认使用 | Boolean | 否 | - |
 
 返回结果：时序数据订阅id
 
@@ -320,21 +319,42 @@ TimescaleDB
 
 # 启动服务
 
-首先安装maven环境，然后进入complete目录（pom.xml所在目录）执行打包程序
-
+-   安装 JDK 1.8 并配置环境变量：
 ```shell
-    mvn package
+https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html
 ```
-生成的jar包文件gs-rest-service-0.1.0.jar位于target目录中，可以拷贝到任意目录中启动服务
-
+-   安装Maven并配置环境变量：
 ```shell
-java -jar gs-rest-service-0.1.0.jar
+https://maven.apache.org/download.cgi
+```
+-   修改.\complete\src\main\resources\fast.properties中的innerURL为本地的TSDB：
+```shell
+jdbc:postgresql://127.0.0.1:5432/
+```
+-   修改端口号：修改fast-rest/complete/src/main/resources/application.properties 中 port
+
+-   进入fast-rest项目complete目录下，执行：
+```shell
+mvn package
+生成的jar包在.\complete\target目录下。
+```
+-   将AutoVis项目的.\sampler目录下的fast.config和restart.sh复制到target目录下，修改fast.config的内容。
+```shell
+innerURL改为：
+jdbc:postgresql://127.0.0.1:5432/
+autovisURL改为：
+http://127.0.0.1:5000/api/datasources/samplesubscription?key=123456
+```
+-   使用在Windows下能运行linux脚本的终端，如Git Bash，运行restat.sh，服务启动：
+```shell
+./restart.sh
 ```
 
-接下来就可以通过GET请求访问restapi服务，例如
-
+-   接下来就可以通过GET请求访问restapi服务，例如
+```shell
     http://localhost:8080/database?url=localhost:6667
-
+```
+-   若代码更新，则在comple目录下重新执行maven指令生成jar包即可。
 
 
 # 测试接口
