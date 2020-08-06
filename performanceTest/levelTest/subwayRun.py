@@ -30,7 +30,7 @@ area_postfix = "-area.png"
 pixel_postfix = "-pixel.png"
 
 start_step = 0
-param_file = "subway-weight.txt"
+param_file = "subway-m4.txt"
 start_time = "2019-08-16 00:00:00"
 end_time = "2019-08-18 00:00:00"
 min_value, max_value = 1750, 3000

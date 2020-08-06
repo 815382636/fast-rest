@@ -121,7 +121,6 @@ public class SubRecoveryController implements ApplicationRunner {
             String starttime = param.get("startTime").toString();
             String endtime = param.containsKey("endTime") ? param.get("endTime").toString() : null;
             String sample = param.get("sample").toString();
-            Boolean correlation =param.containsKey("correlation") ? param.getBoolean("timeLimit") : true;
             Map<String, Double> alpha = param.containsKey("valueLimit") ? (Map)param.get("valueLimit") : null;
             String dbtype = param.get("dbtype").toString();
             Integer ratio = param.containsKey("ratio") ? param.getInteger("ratio") : 20;
@@ -190,7 +189,7 @@ public class SubRecoveryController implements ApplicationRunner {
 
             connection.close();
 
-            new LayerController().subscribe(path, username, password, database, timeseries, columns, timecolumn, newStartTime, endtime, sample,correlation, alpha, ratio, ip, port, dbtype, 100000L);
+            new LayerController().subscribe(path, username, password, database, timeseries, columns, timecolumn, newStartTime, endtime, sample, alpha, ratio, ip, port, dbtype, 100000L);
 
         }
     }

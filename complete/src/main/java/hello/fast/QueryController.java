@@ -114,7 +114,7 @@ public class QueryController {
             System.out.println(tableName);
             if(!hit){
                 res = new ArrayList<>(DataController._dataPoints(
-                    innerUrl, innerUserName, innerPassword, database.replace(".", "_"), tableName, columnsStr + ", weight, error, area", "time", starttime, endtime, null, null, "map", null, null, "postgresql"));
+                    innerUrl, innerUserName, innerPassword, database.replace(".", "_"), tableName, columnsStr + ", weight", "time", starttime, endtime, null, null, "map", null, null, "postgresql"));
             }
             else{
                 res.addAll(DataController._dataPoints(
@@ -130,12 +130,9 @@ public class QueryController {
 
         if(!hit) res = DataController._dataPoints(url, username, password, database, timeseries, columnsStr, timecolumn, starttime, endtime, " limit 10000", null, format, ip, port, dbtype);
         
-        System.out.println("-------------");
-        System.out.println(res.size());
-        System.out.println("-------------");
+        System.out.println("数量："+res.size());
         if (returnType.contains("Integration")) 
         	res =UtilMethod.change_type(res, columns);
-        System.out.println(res.get(0));
         if(format.equals("map")) return res;
         List<Map<String, Object>> result = new ArrayList<>();
         for(Map<String, Object> map : res){
@@ -232,44 +229,50 @@ public class QueryController {
         
         // iotdb is . tsdb is _
         String[] tables = subTables(url, innerUrl, innerUserName, innerPassword, database, timeseries, columnsStr);
-        boolean hit = false;
-        System.out.println("errorPercent:"+errorPercent);
+        int truepercent =0;
         List<Map<String, Object>> res = null;
+        String newStr =columnsStr.toLowerCase();
+        for (int i = 0; i < columns.size(); i++) {
+			newStr +=","+columns.get(i)+"error";
+			newStr +=","+columns.get(i)+"area";
+		}
         for(String tableName : tables){
             System.out.println(tableName);
-            if(!hit){
+            if(truepercent !=columns.size()){
                 res = new ArrayList<>(DataController._dataPoints(
-                    innerUrl, innerUserName, innerPassword, database.replace(".", "_"), tableName, columnsStr + ", weight, error, area", "time", starttime, endtime, null, null, "map", null, null, "postgresql"));
+                    innerUrl, innerUserName, innerPassword, database.replace(".", "_"), tableName, newStr + ", weight", "time", starttime, endtime, null, null, "map", null, null, "postgresql"));
             }
             else {
                 res.addAll(DataController._dataPoints(
-                    innerUrl, innerUserName, innerPassword, database.replace(".", "_"), tableName, columnsStr + ", weight, error, area", "time", starttime, endtime, null, null, "map", null, null, "postgresql"));
+                    innerUrl, innerUserName, innerPassword, database.replace(".", "_"), tableName, newStr + ", weight", "time", starttime, endtime, null, null, "map", null, null, "postgresql"));
             }
-            System.out.println("res.size()" + res.size());
+            
+            truepercent =0;
+            for (int i = 0; i < columns.size(); i++) {
+            	double error= 0.0;
+                double area = 0.0;
 
-            double error= 0.0;
-            double area = 0.0;
+                for(int j = 0; j < res.size(); j++){
+                    error += (double)res.get(j).get(columns.get(i).toLowerCase()+"error");
+                    area += (double)res.get(j).get(columns.get(i).toLowerCase()+"area");
+                }
+                System.out.println("error / area:"+error / area);
+                if((error / area) <= errorPercent) {
+                    truepercent++;
+                }
+			}
 
-            for(int i = 0; i < res.size(); i++){
-                error += (double)res.get(i).get("error");
-                area += (double)res.get(i).get("area");
-            }
-
-            System.out.println("error / area:"+error / area);
-            if((error / area) <= errorPercent) {
-                hit = true;
-            }
-
-            if(hit) starttime = res.get(res.size() - 1).get("time").toString().substring(0,23);
+            if(truepercent ==columns.size()) starttime = res.get(res.size() - 1).get("time").toString().substring(0,23);
         }
 
         // 找不到合适的样本，查询原始数据
-        if(!hit) res = DataController._dataPoints(url, username, password, database, timeseries, columnsStr, timecolumn, starttime, endtime, " limit 10000", null, format, ip, port, dbtype);
+        if(truepercent !=columns.size()) res = DataController._dataPoints(url, username, password, database, timeseries, columnsStr, timecolumn, starttime, endtime, " limit 10000", null, format, ip, port, dbtype);
 
         System.out.println("ErrorQueryController: " + (System.currentTimeMillis() - t1) + "ms");
 
         if (returnType.contains("Integration")) 
         	res =UtilMethod.change_type(res, columns);
+        System.out.println("返回数量："+res.size());
         return res;
     }
 

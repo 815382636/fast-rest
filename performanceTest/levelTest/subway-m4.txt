@@ -13,3 +13,12 @@ http://127.0.0.1:9091/query
 subway-12000-m4
 http://127.0.0.1:9091/query
 {"url":"jdbc:iotdb://101.6.15.201:6667/","database":"root.group_9","timeseries":"1701","columns":["ZT31","ZT32"],"startTime":"2019-08-16 00:00:00","endTime":"2019-08-18 00:00:00","amount":12000,"returnType":"division"}
+subway-error-0.01
+http://127.0.0.1:9091/errorquery
+{"url":"jdbc:iotdb://101.6.15.201:6667/","database":"root.group_9","timeseries":"1701","columns":["ZT31","ZT32"],"startTime":"2019-08-16 00:00:00","endTime":"2019-08-18 00:00:00","error":0.01,"returnType":"division"}
+subway-error-0.1
+http://127.0.0.1:9091/errorquery
+{"url":"jdbc:iotdb://101.6.15.201:6667/","database":"root.group_9","timeseries":"1701","columns":["ZT31","ZT32"],"startTime":"2019-08-16 00:00:00","endTime":"2019-08-18 00:00:00","error":0.1,"returnType":"division"}
+subway-error-1
+http://127.0.0.1:9091/errorquery
+{"url":"jdbc:iotdb://101.6.15.201:6667/","database":"root.group_9","timeseries":"1701","columns":["ZT31","ZT32"],"startTime":"2019-08-16 00:00:00","endTime":"2019-08-18 00:00:00","error":1,"returnType":"division"}
