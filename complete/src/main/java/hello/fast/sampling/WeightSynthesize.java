@@ -14,21 +14,20 @@ public class WeightSynthesize implements SamplingSynthesize{
 		System.out.println("桶数量："+buckets.size());
         for(Bucket bucket : buckets){
             List<Map<String, Object>> datapoints = bucket.getDataPoints();
-            if(datapoints.size() <= 4){
+            if(datapoints.size() <= (labels.length+1)*2){
                 res.addAll(datapoints);
                 continue;
             }
     		List<Map<String, Object>> res1 = new ArrayList<>();
-    		res1.add(datapoints.get(0));
-    		res1.add(datapoints.get(1));
-    		res1.add(datapoints.get(2));
-    		res1.add(datapoints.get(3));
-            for(int i = 4; i < datapoints.size(); i++){
+    		for (int i = 0; i < (labels.length+1)*2; i++) {
+        		res1.add(datapoints.get(i));
+			}
+            for(int i = (labels.length+1)*2; i < datapoints.size(); i++){
                 Map<String, Object> candi = datapoints.get(i);
                 max_value(res1,candi);
 
             }
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < (labels.length+1)*2; i++) {
             	res.add(res1.get(i));
             }                  
         }
@@ -38,7 +37,7 @@ public class WeightSynthesize implements SamplingSynthesize{
 
 	private void max_value(List<Map<String, Object>> res1, Map<String, Object> candi) {
 		Map<String, Object> min =candi;
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < res1.size(); i++) {
 			min =(double)min.get("weight")>(double)res1.get(i).get("weight")?res1.get(i):min;
 		}
 		if (min !=candi) {
