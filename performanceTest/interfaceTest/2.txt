@@ -1,0 +1,6 @@
+intel-data-area.png,1.0
+intel-m4-area.png,0.98333216
+intel-data-area.png,1.0
+intel-m4-area.png,0.98750246
+intel-data-area.png,1.0
+intel-m4-area.png,0.98333216

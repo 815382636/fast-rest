@@ -1,0 +1,6 @@
+intel-data
+http://127.0.0.1:9091/data
+{"correlation":"false","startTime":"2004-03-01 00:00:00","endTime":"2004-03-23 00:00:00","columns":["temperature"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"intel","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","returnType":"division","conditions":"and moteid = 1"}
+intel-m4
+http://127.0.0.1:9091/sample
+{"correlation":"true","amount":500,"sample":"m4","correlation":"true","startTime":"2004-03-01 00:00:00","endTime":"2004-03-23 00:00:00","columns":["temperature"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"intel","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","returnType":"division","conditions":"and moteid = 1"}

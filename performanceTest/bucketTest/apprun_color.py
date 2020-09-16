@@ -27,7 +27,7 @@ pixel_postfix = "-pixel.png"
 
 
 start_step =0
-param_file ="startURL.txt"
+param_file ="subway.txt"
 start_time = "2019-08-16 00:00:00"
 end_time = "2019-08-18 00:00:00"
 min_value, max_value =1900,3000

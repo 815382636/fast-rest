@@ -302,7 +302,11 @@ public class LayerThread extends Thread {
 		}
 		sampleQueue.addAll(sampleDataPoints);
 
-		latestTime = buckets.get(buckets.size() - 1).getDataPoints().get(0).get("time").toString().substring(0, 23);
+		if (buckets.get(buckets.size() - 1).getDataPoints().get(0).get("time").toString().length()>23) {
+			latestTime = buckets.get(buckets.size() - 1).getDataPoints().get(0).get("time").toString().substring(0, 23);
+		}else {
+			latestTime = buckets.get(buckets.size() - 1).getDataPoints().get(0).get("time").toString();
+		}
 
 		// keep sampling data
 		while (!exit) {
@@ -447,11 +451,15 @@ public class LayerThread extends Thread {
 					dataPoints.size() * 1000 / roundtime));
 
 			// 根据throughput触发下一层级
+//			System.out.println("hadKickOff,throughput,kickOffThreshold");
 			if (!hadKickOff && throughput > kickOffThreshold) {
 				hadKickOff = true;
 				String Identifier = String.format("%s,%s,%s,%s,%s", url, database, tableName, columnsStr, salt);
 				String newSubId = DigestUtils.md5DigestAsHex(Identifier.getBytes()).substring(0, 8);
 				System.out.println("kick off the level " + (level + 1) + "<<<<<<!!!!!!!");
+				if (level ==6) {
+					System.out.println("level6:sampleQueue.size:"+sampleQueue.size());
+				}
 				LayerThread pgsubscribeThread = new LayerThread(url, username, password, database, tableName, columns,
 						timecolumn, starttime, endtime, TYPE, ratio, newSubId, level + 1, sample, "postgresql",
 						valueLimit, batchlimit, sampleQueue, bucketSum * ratio / 2);
@@ -468,8 +476,12 @@ public class LayerThread extends Thread {
 
 			// 单独处理最新桶，获得latestTime
 			List<Map<String, Object>> newcomingData = buckets.get(buckets.size() - 1).getDataPoints();
-			latestTime = newcomingData.get(0).get("time").toString().substring(0, 23);
-
+//			latestTime = newcomingData.get(0).get("time").toString().substring(0, 23);
+			if (newcomingData.get(0).get("time").toString().length()>23) {
+				latestTime = newcomingData.get(0).get("time").toString().substring(0, 23);
+			}else {
+				latestTime = newcomingData.get(0).get("time").toString();
+			}
 			// 采样终止条件：latestTime大于截止日期
 			if (endtime != null && latestTime.compareTo(endtime) >= 0) {
 				exit = true;

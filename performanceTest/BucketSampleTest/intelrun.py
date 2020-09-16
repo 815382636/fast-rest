@@ -185,7 +185,7 @@ time_2 = time.time()
 # 3.面积图计算MS-SSIM
 if start_step <= 3:
     print("# 3.面积图计算MS-SSIM...")
-    msssim_result = open("4.txt", "a")
+    msssim_result = open("2.txt", "a")
     # msssim_result.write("%f,%f\n" % (percent, alpha))
     # msssim_result.write("sample,msssim\n")
     area_charts = os.listdir(area_dir)
@@ -204,7 +204,7 @@ if start_step <= 4:
     os.system("rm -R %s" % pixel_dir)
     os.system("mkdir -p %s" % pixel_dir)
     print("# 4.提取折线图像素计算PAE...")
-    pae_result = open("4.txt", "a")
+    pae_result = open("7.txt", "a")
     # pae_result.write("%f,%f\n" % (percent, alpha))
     # pae_result.write("sample,pae\n")
     line_charts = os.listdir(line_dir)

@@ -106,10 +106,10 @@ public class SampleController {
 		}else {
 			if (batchLimit < 100000) {
 				batchLimit = 100000;
-				amount = (int) Math.ceil(amount * batchLimit / dataPointCount);
+				amount = (amount /(int) Math.ceil((double)dataPointCount/100000));
 			}else {
 				if (batchLimit < dataPointCount) {
-					amount = (int) Math.ceil(amount * batchLimit / dataPointCount);
+					amount = amount /(int) Math.ceil((double)dataPointCount/batchLimit);
 				}
 			}
 		}

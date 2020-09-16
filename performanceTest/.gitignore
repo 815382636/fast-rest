@@ -29,3 +29,4 @@ levelTest/zt32_area_png/
 levelTest/zt32_line_png/
 levelTest/zt31_pixel_png/
 levelTest/zt32_pixel_png/
+*.png

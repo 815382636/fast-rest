@@ -33,8 +33,8 @@ plt.figure(figsize=(28, 15))
 for i in range(1, 7):
     data = open("%d.txt" % i).read()
     lines = data.split("\n")
+    print()
     for line in lines:
-        print(line.split(","))
         index = 0
         if "500" in line:
             index = 0
@@ -49,7 +49,10 @@ for i in range(1, 7):
         if "correlation" in line:
             text1[index] = float(line.split(",")[1])
         elif "subway" not in line:
-            text2[index] = float(line.split(",")[1])
+            try:
+                text2[index] = float(line.split(",")[1])
+            except:
+                print(line)
         # if "sample" in line:
         #     sample[index] = float(line.split(",")[1])
         # if "weight" in line:
@@ -60,8 +63,8 @@ for i in range(1, 7):
         #     outlier[index] = float(line.split(",")[1])
 
     ax = plt.subplot(2, 3, i)
-    plt.plot(account, text1, "o-", color='#ED5564', label="correlation-weight")
-    plt.plot(account, text2, "v-", color='#AC92EB', label="weight")
+    plt.plot(account, text1, "o-", color='#ED5564', label="correlation-aggregation")
+    plt.plot(account, text2, "v-", color='#AC92EB', label="aggregation")
     # plt.plot(account, aggregation, "o--", color='#FFCE54', label="aggregation")
     # plt.plot(account, outlier, "v--", color='#D20338', label="outlier")
     # plt.plot(account, weight, "o-.", color='#A0D568', label="weight")

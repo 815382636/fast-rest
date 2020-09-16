@@ -189,7 +189,10 @@ public class BucketsController {
 			p++;
 		}
 		buckets.add(new Bucket(dataPoints.subList(q, p)));
-
+		System.out.println("size:"+buckets.size());
+//		for (int i = 0; i < buckets.size(); i++) {
+//			System.out.println("buck:"+buckets.get(i).getDataPoints().size());
+//		}
 		return buckets;
 	}
 

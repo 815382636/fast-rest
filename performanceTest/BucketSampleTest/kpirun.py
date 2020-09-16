@@ -185,7 +185,7 @@ time_2 = time.time()
 # 3.面积图计算MS-SSIM
 if start_step <= 3:
     print("# 3.面积图计算MS-SSIM...")
-    msssim_result = open("3.txt", "a")
+    msssim_result = open("5.txt", "a")
     # msssim_result.write("%f,%f\n" % (percent, alpha))
     # msssim_result.write("sample,msssim\n")
     area_charts = os.listdir(area_dir)

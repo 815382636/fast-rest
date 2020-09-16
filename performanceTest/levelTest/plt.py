@@ -59,7 +59,7 @@ for i in range(1, 7):
     ax = plt.subplot(2, 3, i)
 
 
-    plt.plot(account, sample, "o-", color='#AC92EB', label="sample")
+    plt.plot(account, sample, "o-", color='#AC92EB', label="random")
     # plt.plot(account, aggregation, "o-", color='#FFCE54', label="aggregation")
     plt.plot(account, outlier, "o-", color='#0870CB', label="outlier")
     plt.plot(account, weight, "o-", color='#A0D568', label="weight")
