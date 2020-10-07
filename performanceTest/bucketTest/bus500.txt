@@ -1,0 +1,27 @@
+bus-univariate-data
+http://127.0.0.1:9091/data
+{"correlation":"false","startTime":"2011-04-03 00:00:00","endTime":"2011-05-05 00:00:00","columns":["shape_dist_traveled"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"b63","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","conditions":"and vehicle_id = 7573","returnType":"division"}
+bus-m4-500-fast
+http://127.0.0.1:9091/sample
+{"correlation":"false","amount":500,"sample":"m4","correlation":"false","startTime":"2011-04-03 00:00:00","endTime":"2011-05-05 00:00:00","columns":["shape_dist_traveled"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"b63","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","conditions":"and vehicle_id = 7573","returnType":"division"}
+bus-aggregation-500-fast
+http://127.0.0.1:9091/sample
+{"correlation":"false","amount":500,"sample":"aggregation","correlation":"false","startTime":"2011-04-03 00:00:00","endTime":"2011-05-05 00:00:00","columns":["shape_dist_traveled"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"b63","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","conditions":"and vehicle_id = 7573","returnType":"division"}
+bus-random-500-fast
+http://127.0.0.1:9091/sample
+{"correlation":"false","amount":500,"sample":"random","correlation":"false","startTime":"2011-04-03 00:00:00","endTime":"2011-05-05 00:00:00","columns":["shape_dist_traveled"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"b63","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","conditions":"and vehicle_id = 7573","returnType":"division"}
+bus-outlier-500-fast
+http://127.0.0.1:9091/sample
+{"correlation":"false","amount":500,"sample":"outlier","correlation":"false","startTime":"2011-04-03 00:00:00","endTime":"2011-05-05 00:00:00","columns":["shape_dist_traveled"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"b63","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","conditions":"and vehicle_id = 7573","returnType":"division"}
+bus-m4-500
+http://127.0.0.1:9091/sample
+{"correlation":"false","bucketMethod":"uniform","amount":500,"sample":"m4","correlation":"false","startTime":"2011-04-03 00:00:00","endTime":"2011-05-05 00:00:00","columns":["shape_dist_traveled"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"b63","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","conditions":"and vehicle_id = 7573","returnType":"division"}
+bus-aggregation-500
+http://127.0.0.1:9091/sample
+{"correlation":"false","bucketMethod":"uniform","amount":500,"sample":"aggregation","correlation":"false","startTime":"2011-04-03 00:00:00","endTime":"2011-05-05 00:00:00","columns":["shape_dist_traveled"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"b63","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","conditions":"and vehicle_id = 7573","returnType":"division"}
+bus-random-500
+http://127.0.0.1:9091/sample
+{"correlation":"false","bucketMethod":"uniform","amount":500,"sample":"random","correlation":"false","startTime":"2011-04-03 00:00:00","endTime":"2011-05-05 00:00:00","columns":["shape_dist_traveled"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"b63","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","conditions":"and vehicle_id = 7573","returnType":"division"}
+bus-weight-500-fast
+http://127.0.0.1:9091/sample
+{"correlation":"false","amount":500,"sample":"weight","correlation":"false","startTime":"2011-04-03 00:00:00","endTime":"2011-05-05 00:00:00","columns":["shape_dist_traveled"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"b63","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","conditions":"and vehicle_id = 7573","returnType":"division"}

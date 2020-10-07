@@ -18,19 +18,20 @@ GREEN = 120
 BLUE = 168
 ALPHA = 255
 
-line_dir = "line_png"
-area_dir = "area_png"
-pixel_dir = "pixel_png"
+line_dir = "busline_png"
+area_dir = "busarea_png"
+pixel_dir = "buspixel_png"
 line_postfix = "-line.png"
 area_postfix = "-area.png"
 pixel_postfix = "-pixel.png"
 
 
 start_step =0
-param_file ="subway.txt"
-start_time = "2019-08-16 00:00:00"
-end_time = "2019-08-18 00:00:00"
-min_value, max_value =1900,3000
+param_file ="bus500.txt"
+start_time = "2011-04-03 00:00:00"
+end_time = "2011-05-05 00:00:00"
+min_value=0
+max_value =12500
 param_lines = open(param_file).read().split("\n")
 n = len(param_lines) // 3
 width =1000
@@ -90,6 +91,7 @@ if start_step <= 2:
     for i in range(0, n):
         name = param_lines[i * 3]
         url = param_lines[i * 3 + 1]
+        print(param_lines[i * 3 + 2])
         parameter = json.loads(param_lines[i * 3 + 2])
 
         time_label = "time"
@@ -163,6 +165,7 @@ if start_step <= 2:
             color = "#2E2EFE"
         if "random" in name:
             color = "#FFCE54"
+
         alt.Chart(json_data).mark_line().encode(
             alt.X(scale=alt.Scale(domain=[start_time, end_time]), field=time_label, type="temporal",
                   axis=alt.Axis(title="", labelFontSize=20)),
@@ -196,10 +199,126 @@ if start_step <= 2:
 
 time_2 = time.time()
 
-
-
-
-print("# 本次脚本测试完成！")
-print("# 用时%s ms " % ((time_2 - time_start) * 1000))
-
-
+# # 3.面积图计算MS-SSIM
+# if start_step <= 3:
+#     print("# 3.面积图计算MS-SSIM...")
+#     msssim_result = open("3.txt", "w")
+#     # msssim_result.write("%f,%f\n" % (percent, alpha))
+#     # msssim_result.write("sample,msssim\n")
+#     area_charts = os.listdir(area_dir)
+#     for area_chart in area_charts:
+#         msssim = calcMSSSIM(area_dir + "/" + base_area_png, area_dir + "/" + area_chart)
+#         ms = (area_chart + "," + str(msssim) + "\n").replace("tf.Tensor(", "").replace(", shape=(), dtype=float32)", "")
+#         msssim_result.write(ms)
+#     msssim_result.close()
+#     time_3 = time.time()
+#     print("# 3.用时%s ms " % ((time_3 - time_2) * 1000))
+#
+# time_3 = time.time()
+#
+# # 4.提取折线图像素计算PAE
+# if start_step <= 4:
+#     os.system("rm -R %s" % pixel_dir)
+#     os.system("mkdir -p %s" % pixel_dir)
+#     print("# 4.提取折线图像素计算PAE...")
+#     pae_result = open("8.txt", "w")
+#     # pae_result.write("%f,%f\n" % (percent, alpha))
+#     # pae_result.write("sample,pae\n")
+#     line_charts = os.listdir(line_dir)
+#     for line_chart in line_charts:
+#         pixel_data = line2pixel(line_dir + "/" + line_chart)
+#         alt.Chart(pd.DataFrame(pixel_data)).mark_line().encode(
+#             alt.X(field="x", type="quantitative", axis=alt.Axis(title="", labelFontSize=20)),
+#             alt.Y(field="y", type="quantitative", axis=alt.Axis(title="", labelFontSize=20)),
+#         ).properties(
+#             width=width,
+#             height=height
+#         ).save(line_chart + pixel_postfix)
+#         os.system("mv *%s %s" % (pixel_postfix, pixel_dir))
+#         ys = list(map(lambda x: float(x["y"]), pixel_data))
+#         pae_result.write(line_chart + "," + str(pae_meas.pae(ys)) + "\n")
+#     pae_result.close()
+#
+#     time_4 = time.time()
+#     print("# 4.用时%s ms " % ((time_4 - time_3) * 1000))
+# time_4 = time.time()
+#
+# # 5.面积图提取上沿计算均方误差
+# if start_step <= 5:
+#     print("# 5.面积图提取上沿计算均方误差...")
+#     mse_result = open("mse_result.txt", "a")
+#     # mse_result.write("%f,%f\n" % (percent, alpha))
+#     mse_result.write("sample,mse\n")
+#     pixel_data_0 = line2pixel(area_dir + "/" + base_area_png)
+#     ys_0 = np.array(list(map(lambda x: float(x["y"]), pixel_data_0)))
+#
+#     area_charts = os.listdir(area_dir)
+#     for area_chart in area_charts:
+#         pixel_data = line2pixel(area_dir + "/" + area_chart)
+#         alt.Chart(pd.DataFrame(pixel_data)).mark_line().encode(
+#             alt.X(field="x", type="quantitative", axis=alt.Axis(title="", labelFontSize=20)),
+#             alt.Y(field="y", type="quantitative", axis=alt.Axis(title="", labelFontSize=20)),
+#         ).properties(
+#             width=width,
+#             height=height
+#         ).save(area_chart + pixel_postfix)
+#         os.system("mv *%s %s" % (pixel_postfix, pixel_dir))
+#         ys = np.array(list(map(lambda x: float(x["y"]), pixel_data)))
+#         mse_result.write(area_chart + "," + str(((ys - ys_0) ** 2).sum() / len(ys_0)) + "\n")
+#     mse_result.close()
+#
+#     time_5 = time.time()
+#     print("# 5.用时%s ms " % ((time_5 - time_4) * 1000))
+#
+# time_5 = time.time()
+#
+# # 5.折线图提取上沿计算均方误差
+# if start_step <= 6:
+#     print("# 6.折线图提取上沿计算均方误差...")
+#     mse_result = open("13.txt", "w")
+#     # mse_result.write("%f,%f\n" % (percent, alpha))
+#     # mse_result.write("sample,pmse\n")
+#     pixel_data_0 = line2pixel(line_dir + "/" + base_line_png)
+#     ys_0 = np.array(list(map(lambda x: float(x["y"]), pixel_data_0)))
+#
+#     line_charts = os.listdir(line_dir)
+#     for line_chart in line_charts:
+#         pixel_data = line2pixel(line_dir + "/" + line_chart)
+#         ys = np.array(list(map(lambda x: float(x["y"]), pixel_data)))
+#         mse_result.write(line_chart + "," + str(((ys - ys_0) ** 2).sum() / len(ys_0)) + "\n")
+#     mse_result.close()
+#
+#     time_5 = time.time()
+#     print("# 5.用时%s ms " % ((time_5 - time_4) * 1000))
+#
+# time_5 = time.time()
+#
+# # 7.折线图计算MS-SSIM
+# if start_step <= 3:
+#     print("# 7.折线图计算MS-SSIM...")
+#     msssim_result = open("l_msssim_result.txt", "a")
+#     # msssim_result.write("%f,%f\n" % (percent, alpha))
+#     msssim_result.write("sample,msssim\n")
+#     line_charts = os.listdir(line_dir)
+#     for line_chart in line_charts:
+#         msssim = calcMSSSIM(line_dir + "/" + base_line_png, line_dir + "/" + line_chart)
+#         ms = (line_chart + "," + str(msssim) + "\n").replace("tf.Tensor(", "").replace(", shape=(), dtype=float32)", "")
+#         msssim_result.write(ms)
+#     msssim_result.close()
+#     time_6 = time.time()
+#     print("# 7.用时%s ms " % ((time_6 - time_5) * 1000))
+#
+# time_6 = time.time()
+#
+# # 6. 绘制统计指标结果
+# # stat_result = open("stat_result.txt")
+# # mse_result = open("mse_result.txt")
+# #
+# # msssim_result = open("msssim_result.txt")
+# # pae_result = open("pae_result.txt")
+#
+#
+# print("# 本次脚本测试完成！")
+# print("# 用时%s ms " % ((time_5 - time_start) * 1000))
+#
+#

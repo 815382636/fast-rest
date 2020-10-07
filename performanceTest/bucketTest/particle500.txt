@@ -1,0 +1,27 @@
+particle-data
+http://127.0.0.1:9091/data
+{"correlation":"false","startTime":"2012-04-19 14:00:00","endTime":"2012-04-21 14:00:00","columns":["diam_particles"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"particle","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","conditions":"and tram_id = 5","returnType":"division"}
+particle-m4-500-fast
+http://127.0.0.1:9091/sample
+{"correlation":"false","amount":500,"sample":"m4","correlation":"false","startTime":"2012-04-19 14:00:00","endTime":"2012-04-21 14:00:00","columns":["diam_particles"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"particle","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","conditions":"and tram_id = 5","returnType":"division"}
+particle-aggregation-500-fast
+http://127.0.0.1:9091/sample
+{"correlation":"false","amount":500,"sample":"aggregation","correlation":"false","startTime":"2012-04-19 14:00:00","endTime":"2012-04-21 14:00:00","columns":["diam_particles"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"particle","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","conditions":"and tram_id = 5","returnType":"division"}
+particle-random-500-fast
+http://127.0.0.1:9091/sample
+{"correlation":"false","amount":500,"sample":"random","correlation":"false","startTime":"2012-04-19 14:00:00","endTime":"2012-04-21 14:00:00","columns":["diam_particles"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"particle","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","conditions":"and tram_id = 5","returnType":"division"}
+particle-m4-500
+http://127.0.0.1:9091/sample
+{"correlation":"false","bucketMethod":"uniform","amount":500,"sample":"m4","correlation":"false","startTime":"2012-04-19 14:00:00","endTime":"2012-04-21 14:00:00","columns":["diam_particles"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"particle","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","conditions":"and tram_id = 5","returnType":"division"}
+particle-aggregation-500
+http://127.0.0.1:9091/sample
+{"correlation":"false","bucketMethod":"uniform","amount":500,"sample":"aggregation","correlation":"false","startTime":"2012-04-19 14:00:00","endTime":"2012-04-21 14:00:00","columns":["diam_particles"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"particle","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","conditions":"and tram_id = 5","returnType":"division"}
+particle-random-500
+http://127.0.0.1:9091/sample
+{"correlation":"false","bucketMethod":"uniform","amount":500,"sample":"random","correlation":"false","startTime":"2012-04-19 14:00:00","endTime":"2012-04-21 14:00:00","columns":["diam_particles"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"particle","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","conditions":"and tram_id = 5","returnType":"division"}
+particle-outlier-500-fast
+http://127.0.0.1:9091/sample
+{"correlation":"false","amount":500,"sample":"outlier","correlation":"false","startTime":"2012-04-19 14:00:00","endTime":"2012-04-21 14:00:00","columns":["diam_particles"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"particle","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","conditions":"and tram_id = 5","returnType":"division"}
+particle-weight-500-fast
+http://127.0.0.1:9091/sample
+{"correlation":"false","amount":500,"sample":"weight","correlation":"false","startTime":"2012-04-19 14:00:00","endTime":"2012-04-21 14:00:00","columns":["diam_particles"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"particle","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","conditions":"and tram_id = 5","returnType":"division"}

@@ -70,9 +70,10 @@ for i in range(1, 7):
     plt.grid()
     plt.xticks(fontsize=13)
     plt.yticks(fontsize=13)
+
     if i <= 10:
         plt.gca().yaxis.set_major_formatter(ticker.FormatStrFormatter('%.3f'))
 
-ax.legend(bbox_to_anchor=(-0.22, -0.22), loc='lower right', ncol=7, fontsize="x-large")
+ax.legend(bbox_to_anchor=(-0.12, -0.26), loc='lower right', ncol=7, fontsize=18)
 plt.savefig('result.jpg')
 plt.show()

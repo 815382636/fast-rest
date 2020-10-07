@@ -1,0 +1,27 @@
+kpi-data
+http://127.0.0.1:9091/data
+{"correlation":"false","startTime":"2017-05-01 00:00:00","endTime":"2017-07-31 12:34:00","returnType":"division","columns":["value"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"kpi","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","conditions":"and id = 'ffb82d38-5f00-37db-abc0-5d2e4e4cb6aa'"}
+kpi-m4-500-fast
+http://127.0.0.1:9091/sample
+{"correlation":"false","amount":500,"sample":"m4","correlation":"false","startTime":"2017-05-01 00:00:00","endTime":"2017-07-31 12:34:00","returnType":"division","columns":["value"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"kpi","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","conditions":"and id = 'ffb82d38-5f00-37db-abc0-5d2e4e4cb6aa'"}
+kpi-aggregation-500-fast
+http://127.0.0.1:9091/sample
+{"correlation":"false","amount":500,"sample":"aggregation","correlation":"false","startTime":"2017-05-01 00:00:00","endTime":"2017-07-31 12:34:00","returnType":"division","columns":["value"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"kpi","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","conditions":"and id = 'ffb82d38-5f00-37db-abc0-5d2e4e4cb6aa'"}
+kpi-random-500-fast
+http://127.0.0.1:9091/sample
+{"correlation":"false","amount":500,"sample":"random","correlation":"false","startTime":"2017-05-01 00:00:00","endTime":"2017-07-31 12:34:00","returnType":"division","columns":["value"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"kpi","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","conditions":"and id = 'ffb82d38-5f00-37db-abc0-5d2e4e4cb6aa'"}
+kpi-m4-500
+http://127.0.0.1:9091/sample
+{"correlation":"false","bucketMethod":"uniform","amount":500,"sample":"m4","correlation":"false","startTime":"2017-05-01 00:00:00","endTime":"2017-07-31 12:34:00","returnType":"division","columns":["value"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"kpi","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","conditions":"and id = 'ffb82d38-5f00-37db-abc0-5d2e4e4cb6aa'"}
+kpi-aggregation-500
+http://127.0.0.1:9091/sample
+{"correlation":"false","bucketMethod":"uniform","amount":500,"sample":"aggregation","correlation":"false","startTime":"2017-05-01 00:00:00","endTime":"2017-07-31 12:34:00","returnType":"division","columns":["value"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"kpi","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","conditions":"and id = 'ffb82d38-5f00-37db-abc0-5d2e4e4cb6aa'"}
+kpi-random-500
+http://127.0.0.1:9091/sample
+{"correlation":"false","bucketMethod":"uniform","amount":500,"sample":"random","correlation":"false","startTime":"2017-05-01 00:00:00","endTime":"2017-07-31 12:34:00","returnType":"division","columns":["value"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"kpi","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","conditions":"and id = 'ffb82d38-5f00-37db-abc0-5d2e4e4cb6aa'"}
+kpi-outlier-500-fast
+http://127.0.0.1:9091/sample
+{"correlation":"false","amount":500,"sample":"outlier","correlation":"false","startTime":"2017-05-01 00:00:00","endTime":"2017-07-31 12:34:00","returnType":"division","columns":["value"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"kpi","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","conditions":"and id = 'ffb82d38-5f00-37db-abc0-5d2e4e4cb6aa'"}
+kpi-weight-500-fast
+http://127.0.0.1:9091/sample
+{"correlation":"false","amount":500,"sample":"weight","correlation":"false","startTime":"2017-05-01 00:00:00","endTime":"2017-07-31 12:34:00","returnType":"division","columns":["value"],"database":"nyc_data","dbtype":"postgresql","password":"1111aaaa","timeseries":"kpi","url":"jdbc:postgresql://192.168.10.172:5432/","username":"postgres","conditions":"and id = 'ffb82d38-5f00-37db-abc0-5d2e4e4cb6aa'"}
